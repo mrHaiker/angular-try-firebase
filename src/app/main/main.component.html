@@ -1,7 +1,7 @@
 <div class="coin-header">
   <div class="container">
     <div class="coin__header">
-      <p class="coin__ticket m-0">{{ coin }}/USD</p>
+      <p class="coin__ticket m-0" (click)="openPopup()">{{ coin }}/USD</p>
       <p class="coin__balance m-0">{{ availableMoney + profit | currency }} </p>
       <p class="coin__profit m-0">{{ profit | currency }}</p>
       <div class="coin__input">
@@ -47,4 +47,27 @@
     </tr>
     </tbody>
   </table>
+</div>
+
+
+<div class="popup" *ngIf="settings">
+  <div class="popup__over" (click)="openPopup(false)"></div>
+  <div class="popup__window">
+    <div class="form-group">
+      <label>Loss</label>
+      <input class="form-control" type="number" [(ngModel)]="config.loss"><br>
+
+      <label>Profit</label>
+      <input class="form-control" type="number" [(ngModel)]="config.profit"><br>
+
+      <label>Step</label>
+      <input class="form-control" type="number" [(ngModel)]="config.step"><br>
+
+      <label>Out</label>
+      <input class="form-control" type="number" [(ngModel)]="config.hardOut">
+      <div class="popup__btn-wrap">
+        <button class="btn btn-primary" (click)="openPopup(false)">ok</button>
+      </div>
+    </div>
+  </div>
 </div>

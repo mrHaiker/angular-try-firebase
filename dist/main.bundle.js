@@ -132,7 +132,7 @@ var AppModule = (function () {
 /***/ "../../../../../src/app/main/main.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"coin-header\">\n  <div class=\"container\">\n    <div class=\"coin__header\">\n      <p class=\"coin__ticket m-0\">{{ coin }}/USD</p>\n      <p class=\"coin__balance m-0\">{{ availableMoney + profit | currency }} </p>\n      <p class=\"coin__profit m-0\">{{ profit | currency }}</p>\n      <div class=\"coin__input\">\n        <input type=\"text\" class=\"form-control\" [(ngModel)]=\"coin\">\n      </div>\n\n      <button class=\"btn btn-secondary ml-2\">\n        <i class=\"fa fa-play\" aria-hidden=\"true\"></i>\n      </button>\n    </div>\n  </div>\n</div>\n\n<div class=\"container\">\n  <hr>\n  <p>Currency price: <span> {{ price | currency }}</span></p>\n\n\n  <hr>\n  <table class=\"table\">\n    <thead>\n    <tr>\n      <th scope=\"col\">#</th>\n      <th scope=\"col\">Open</th>\n      <th scope=\"col\">Count</th>\n      <th scope=\"col\">Close</th>\n      <th scope=\"col\">Profit</th>\n      <th scope=\"col\">Trend</th>\n    </tr>\n    </thead>\n    <tbody>\n    <tr class=\"coin__row\" *ngFor=\"let item of list; let i = index\"\n        [ngClass]=\"{'green': item.profit > 0, 'red': item.profit < 0}\">\n      <th scope=\"row\">{{ i + 1}}</th>\n      <td>{{ item.open | currency}}</td>\n      <td>{{ item.count}}</td>\n      <td>{{ item.close | currency}}</td>\n      <td>\n        {{ item.profit | currency}}\n        <span *ngIf=\"item.status === 1 && item.trend\">({{ currencyProfit | percent:'0.2-2' }})</span>\n      </td>\n      <td>{{ item.trend === -1 ? 'SHORT' : item.trend === 1 ? 'LONG' : 'WAIT'}}</td>\n    </tr>\n    </tbody>\n  </table>\n</div>\n"
+module.exports = "<div class=\"coin-header\">\n  <div class=\"container\">\n    <div class=\"coin__header\">\n      <p class=\"coin__ticket m-0\" (click)=\"openPopup()\">{{ coin }}/USD</p>\n      <p class=\"coin__balance m-0\">{{ availableMoney + profit | currency }} </p>\n      <p class=\"coin__profit m-0\">{{ profit | currency }}</p>\n      <div class=\"coin__input\">\n        <input type=\"text\" class=\"form-control\" [(ngModel)]=\"coin\">\n      </div>\n\n      <button class=\"btn btn-secondary ml-2\">\n        <i class=\"fa fa-play\" aria-hidden=\"true\"></i>\n      </button>\n    </div>\n  </div>\n</div>\n\n<div class=\"container\">\n  <hr>\n  <p>Currency price: <span> {{ price | currency }}</span></p>\n\n\n  <hr>\n  <table class=\"table\">\n    <thead>\n    <tr>\n      <th scope=\"col\">#</th>\n      <th scope=\"col\">Open</th>\n      <th scope=\"col\">Count</th>\n      <th scope=\"col\">Close</th>\n      <th scope=\"col\">Profit</th>\n      <th scope=\"col\">Trend</th>\n    </tr>\n    </thead>\n    <tbody>\n    <tr class=\"coin__row\" *ngFor=\"let item of list; let i = index\"\n        [ngClass]=\"{'green': item.profit > 0, 'red': item.profit < 0}\">\n      <th scope=\"row\">{{ i + 1}}</th>\n      <td>{{ item.open | currency}}</td>\n      <td>{{ item.count}}</td>\n      <td>{{ item.close | currency}}</td>\n      <td>\n        {{ item.profit | currency}}\n        <span *ngIf=\"item.status === 1 && item.trend\">({{ currencyProfit | percent:'0.2-2' }})</span>\n      </td>\n      <td>{{ item.trend === -1 ? 'SHORT' : item.trend === 1 ? 'LONG' : 'WAIT'}}</td>\n    </tr>\n    </tbody>\n  </table>\n</div>\n\n\n<div class=\"popup\" *ngIf=\"settings\">\n  <div class=\"popup__over\" (click)=\"openPopup(false)\"></div>\n  <div class=\"popup__window\">\n    <div class=\"form-group\">\n      <label>Loss</label>\n      <input class=\"form-control\" type=\"number\" [(ngModel)]=\"config.loss\"><br>\n\n      <label>Profit</label>\n      <input class=\"form-control\" type=\"number\" [(ngModel)]=\"config.profit\"><br>\n\n      <label>Step</label>\n      <input class=\"form-control\" type=\"number\" [(ngModel)]=\"config.step\"><br>\n\n      <label>Out</label>\n      <input class=\"form-control\" type=\"number\" [(ngModel)]=\"config.hardOut\">\n      <div class=\"popup__btn-wrap\">\n        <button class=\"btn btn-primary\" (click)=\"openPopup(false)\">ok</button>\n      </div>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -144,7 +144,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".coin-header {\n  background: #f2f2f2;\n  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2); }\n\n.coin__header {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: row;\n          flex-direction: row;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  height: 60px; }\n\n.coin__balance, .coin__profit, .coin__ticket {\n  -webkit-box-flex: 0;\n      -ms-flex: 0 0 120px;\n          flex: 0 0 120px; }\n\n.coin__input {\n  -webkit-box-flex: 1;\n      -ms-flex: 1 0 0px;\n          flex: 1 0 0;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: end;\n      -ms-flex-pack: end;\n          justify-content: flex-end; }\n  .coin__input input {\n    width: 200px; }\n\n.coin__row.red {\n  background: rgba(255, 129, 130, 0.25); }\n\n.coin__row.green {\n  background: rgba(95, 128, 97, 0.25); }\n", ""]);
+exports.push([module.i, ".coin-header {\n  background: #f2f2f2;\n  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2); }\n\n.coin__header {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: row;\n          flex-direction: row;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  height: 60px; }\n\n.coin__balance, .coin__profit, .coin__ticket {\n  -webkit-box-flex: 0;\n      -ms-flex: 0 0 120px;\n          flex: 0 0 120px; }\n\n.coin__input {\n  -webkit-box-flex: 1;\n      -ms-flex: 1 0 0px;\n          flex: 1 0 0;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: end;\n      -ms-flex-pack: end;\n          justify-content: flex-end; }\n  .coin__input input {\n    width: 200px; }\n\n.coin__row.red {\n  background: rgba(255, 129, 130, 0.25); }\n\n.coin__row.green {\n  background: rgba(95, 128, 97, 0.25); }\n\n.popup {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center; }\n  .popup__over {\n    background: rgba(0, 0, 0, 0.3);\n    position: absolute;\n    top: 0;\n    left: 0;\n    height: 100%;\n    width: 100%; }\n  .popup__window {\n    width: 500px;\n    padding: 20px;\n    background: #fff;\n    border-radius: 4px;\n    position: relative;\n    z-index: 2; }\n  .popup__btn-wrap {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    margin-top: 20px; }\n", ""]);
 
 // exports
 
@@ -164,6 +164,7 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__ = __webpack_require__("../../../../rxjs/_esm5/Observable.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_observable_timer__ = __webpack_require__("../../../../rxjs/_esm5/add/observable/timer.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_trade_service__ = __webpack_require__("../../../../../src/app/services/trade.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_storage_service__ = __webpack_require__("../../../../../src/app/services/storage.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -178,17 +179,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var MainComponent = (function () {
-    function MainComponent(main, trade) {
+    function MainComponent(storage, main, trade) {
+        this.storage = storage;
         this.main = main;
         this.trade = trade;
-        this.coin = 'BTC';
+        this.coin = this.storage.get(__WEBPACK_IMPORTED_MODULE_5__services_storage_service__["a" /* LocalStorage */].COIN) || 'BTC';
         this.list = this.trade.history;
         this.availableMoney = 10000;
         this.config = {
             loss: 0.1,
             profit: 0.5,
-            step: 1,
+            step: 0.1,
             hardOut: 10
         };
     }
@@ -208,8 +211,16 @@ var MainComponent = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(MainComponent.prototype, "step", {
+        get: function () {
+            return (this.availableMoney / this.price / this.config.hardOut).toFixed(2);
+        },
+        enumerable: true,
+        configurable: true
+    });
     MainComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.storage.set(__WEBPACK_IMPORTED_MODULE_5__services_storage_service__["a" /* LocalStorage */].COIN, this.coin);
         this.priceListener();
         __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["a" /* Observable */].timer(1, 1000).subscribe(function (val) { return _this.cycle(val); });
     };
@@ -232,12 +243,12 @@ var MainComponent = (function () {
         if (this.order.count === this.config.hardOut)
             return this.closePosition();
         var trend = this.order.trend === __WEBPACK_IMPORTED_MODULE_4__services_trade_service__["b" /* OrderTrend */].SHORT ? __WEBPACK_IMPORTED_MODULE_4__services_trade_service__["b" /* OrderTrend */].LONG : __WEBPACK_IMPORTED_MODULE_4__services_trade_service__["b" /* OrderTrend */].SHORT;
-        var position = this.order.count + this.config.step;
+        var position = this.order.count + this.step;
         this.trade.closePosition(this.price, this.order);
         this.openPosition(trend, position);
     };
     MainComponent.prototype.openPosition = function (trend, count) {
-        if (count === void 0) { count = 1; }
+        if (count === void 0) { count = this.step; }
         this.trade.openPosition(this.price, trend, count);
         this.checkPosition(true);
     };
@@ -254,6 +265,10 @@ var MainComponent = (function () {
             return;
         order.profit = (this.price - order.open) * order.count * order.trend;
         return order;
+    };
+    MainComponent.prototype.openPopup = function (open) {
+        if (open === void 0) { open = true; }
+        this.settings = open;
     };
     MainComponent.prototype.priceListener = function () {
         var _this = this;
@@ -272,7 +287,8 @@ var MainComponent = (function () {
             template: __webpack_require__("../../../../../src/app/main/main.component.html"),
             styles: [__webpack_require__("../../../../../src/app/main/main.component.scss")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__main_service__["a" /* MainService */],
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_5__services_storage_service__["b" /* StorageService */],
+            __WEBPACK_IMPORTED_MODULE_1__main_service__["a" /* MainService */],
             __WEBPACK_IMPORTED_MODULE_4__services_trade_service__["c" /* TradeService */]])
     ], MainComponent);
     return MainComponent;
@@ -390,6 +406,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var LocalStorage = {
     PROFIT: 'profit',
     POSITION: 'position',
+    COIN: 'coin',
     HISTORY: 'history'
 };
 var StorageService = (function () {
@@ -466,7 +483,6 @@ var TradeService = (function () {
         configurable: true
     });
     TradeService.prototype.openPosition = function (price, trend, count) {
-        if (count === void 0) { count = 1; }
         var order = new Order({ open: price, trend: trend, count: count, status: OrderStatus.OPEN });
         this.storage.set(__WEBPACK_IMPORTED_MODULE_1__storage_service__["a" /* LocalStorage */].POSITION, order);
         return order;

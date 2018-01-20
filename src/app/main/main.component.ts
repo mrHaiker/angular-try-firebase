@@ -3,6 +3,7 @@ import { MainService } from './main.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/timer';
 import { Order, OrderStatus, OrderTrend, TradeService } from '../services/trade.service';
+import { LocalStorage, StorageService } from '../services/storage.service';
 
 
 @Component({
@@ -12,22 +13,23 @@ import { Order, OrderStatus, OrderTrend, TradeService } from '../services/trade.
 })
 export class MainComponent implements OnInit {
   public price: number;
-  public allProfit: number;
   public currencyProfit: number;
-  public coin = 'BTC';
+  public coin = this.storage.get(LocalStorage.COIN) || 'BTC';
   public list: Order[] = this.trade.history;
   public order: Order;
   public availableMoney = 10000;
+  public settings: boolean;
 
   private config = {
     loss: 0.1,
     profit: 0.5,
-    step: 1,
+    step: 0.1,
     hardOut: 10
   };
 
   private checkedPosition: boolean;
   constructor(
+    private storage: StorageService,
     private main: MainService,
     private trade: TradeService
   ) { }
@@ -42,8 +44,14 @@ export class MainComponent implements OnInit {
     return this.currencyProfit + this.historyProfit
   }
 
+  get step(): number {
+    return <any>(this.availableMoney / this.price / this.config.hardOut).toFixed(2);
+  }
+
 
   ngOnInit() {
+    this.storage.set(LocalStorage.COIN, this.coin);
+
     this.priceListener();
     Observable.timer(1, 1000).subscribe((val) => this.cycle(val));
   }
@@ -73,13 +81,13 @@ export class MainComponent implements OnInit {
     if (this.order.count === this.config.hardOut) return this.closePosition();
 
     const trend = this.order.trend === OrderTrend.SHORT ? OrderTrend.LONG : OrderTrend.SHORT;
-    const position = this.order.count + this.config.step;
+    const position = this.order.count + this.step;
 
     this.trade.closePosition(this.price, this.order);
     this.openPosition(trend, position);
   }
 
-  openPosition(trend: OrderTrend, count = 1): void {
+  openPosition(trend: OrderTrend, count = this.step): void {
     this.trade.openPosition(this.price, trend, count);
     this.checkPosition(true);
   }
@@ -99,6 +107,10 @@ export class MainComponent implements OnInit {
 
     order.profit = (this.price - order.open) * order.count * order.trend;
     return order
+  }
+
+  openPopup(open = true): void {
+    this.settings = open;
   }
 
 

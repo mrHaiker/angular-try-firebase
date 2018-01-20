@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 export const LocalStorage = {
   PROFIT: 'profit',
   POSITION: 'position',
+  COIN: 'coin',
   HISTORY: 'history'
 };
 
