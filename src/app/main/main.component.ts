@@ -20,7 +20,7 @@ export class MainComponent implements OnInit {
   public availableMoney = 10000;
   public settings: boolean;
 
-  private config = {
+  private config = this.storage.get(LocalStorage.SETTINGS) || {
     loss: 0.1,
     profit: 0.5,
     step: 0.1,
@@ -45,7 +45,7 @@ export class MainComponent implements OnInit {
   }
 
   get step(): number {
-    return <any>(this.availableMoney / this.price / this.config.hardOut).toFixed(2);
+    return Number((this.availableMoney / this.price / this.config.hardOut).toFixed(2));
   }
 
 
@@ -110,6 +110,8 @@ export class MainComponent implements OnInit {
   }
 
   openPopup(open = true): void {
+    if (!open) this.storage.set(LocalStorage.SETTINGS, this.config);
+
     this.settings = open;
   }
 

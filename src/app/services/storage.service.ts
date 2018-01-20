@@ -4,6 +4,7 @@ export const LocalStorage = {
   PROFIT: 'profit',
   POSITION: 'position',
   COIN: 'coin',
+  SETTINGS: 'settings',
   HISTORY: 'history'
 };
 

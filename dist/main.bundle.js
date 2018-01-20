@@ -188,7 +188,7 @@ var MainComponent = (function () {
         this.coin = this.storage.get(__WEBPACK_IMPORTED_MODULE_5__services_storage_service__["a" /* LocalStorage */].COIN) || 'BTC';
         this.list = this.trade.history;
         this.availableMoney = 10000;
-        this.config = {
+        this.config = this.storage.get(__WEBPACK_IMPORTED_MODULE_5__services_storage_service__["a" /* LocalStorage */].SETTINGS) || {
             loss: 0.1,
             profit: 0.5,
             step: 0.1,
@@ -213,7 +213,7 @@ var MainComponent = (function () {
     });
     Object.defineProperty(MainComponent.prototype, "step", {
         get: function () {
-            return (this.availableMoney / this.price / this.config.hardOut).toFixed(2);
+            return Number((this.availableMoney / this.price / this.config.hardOut).toFixed(2));
         },
         enumerable: true,
         configurable: true
@@ -268,6 +268,8 @@ var MainComponent = (function () {
     };
     MainComponent.prototype.openPopup = function (open) {
         if (open === void 0) { open = true; }
+        if (!open)
+            this.storage.set(__WEBPACK_IMPORTED_MODULE_5__services_storage_service__["a" /* LocalStorage */].SETTINGS, this.config);
         this.settings = open;
     };
     MainComponent.prototype.priceListener = function () {
@@ -407,6 +409,7 @@ var LocalStorage = {
     PROFIT: 'profit',
     POSITION: 'position',
     COIN: 'coin',
+    SETTINGS: 'settings',
     HISTORY: 'history'
 };
 var StorageService = (function () {
