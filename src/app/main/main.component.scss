@@ -1,0 +1,33 @@
+.coin {
+  &-header {
+    background: #f2f2f2;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, .2);
+  }
+  &__header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 60px;
+  }
+  &__balance,
+  &__profit,
+  &__ticket {
+    flex: 0 0 120px;
+  }
+  &__input {
+    flex: 1 0 0;
+    display: flex;
+    justify-content: flex-end;
+    input {
+      width: 200px;
+    }
+  }
+  &__row {
+    &.red {
+      background: rgba(255, 129, 130, 0.25);
+    }
+    &.green {
+      background: rgba(95, 128, 97, 0.25);
+    }
+  }
+}

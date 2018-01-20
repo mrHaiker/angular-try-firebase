@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireDatabase } from 'angularfire2/database';
-import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/timer';
+
+
 
 @Component({
   selector: 'app-root',
@@ -8,14 +9,9 @@ import { Observable } from 'rxjs/Observable';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit{
-  title = 'app';
-  items: Observable<any[]>;
-
   constructor(
-    protected db: AngularFireDatabase
   ) {}
 
   ngOnInit() {
-    // this.items = this.db.collection('items').valueChanges();
   }
 }

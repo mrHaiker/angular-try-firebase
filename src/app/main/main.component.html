@@ -1,0 +1,50 @@
+<div class="coin-header">
+  <div class="container">
+    <div class="coin__header">
+      <p class="coin__ticket m-0">{{ coin }}/USD</p>
+      <p class="coin__balance m-0">{{ availableMoney + profit | currency }} </p>
+      <p class="coin__profit m-0">{{ profit | currency }}</p>
+      <div class="coin__input">
+        <input type="text" class="form-control" [(ngModel)]="coin">
+      </div>
+
+      <button class="btn btn-secondary ml-2">
+        <i class="fa fa-play" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <hr>
+  <p>Currency price: <span> {{ price | currency }}</span></p>
+
+
+  <hr>
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Open</th>
+      <th scope="col">Count</th>
+      <th scope="col">Close</th>
+      <th scope="col">Profit</th>
+      <th scope="col">Trend</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="coin__row" *ngFor="let item of list; let i = index"
+        [ngClass]="{'green': item.profit > 0, 'red': item.profit < 0}">
+      <th scope="row">{{ i + 1}}</th>
+      <td>{{ item.open | currency}}</td>
+      <td>{{ item.count}}</td>
+      <td>{{ item.close | currency}}</td>
+      <td>
+        {{ item.profit | currency}}
+        <span *ngIf="item.status === 1 && item.trend">({{ currencyProfit | percent:'0.2-2' }})</span>
+      </td>
+      <td>{{ item.trend === -1 ? 'SHORT' : item.trend === 1 ? 'LONG' : 'WAIT'}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

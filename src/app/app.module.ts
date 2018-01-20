@@ -1,10 +1,9 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { environment } from '../environments/environment';
-import { AngularFireModule } from 'angularfire2';
-import { AngularFireDatabaseModule } from 'angularfire2/database';
-import { AngularFireAuthModule } from 'angularfire2/auth';
+import { BrowserModule } from '@angular/platform-browser';
+import { MainModule } from './main/main.module';
+import { StorageService } from './services/storage.service';
+import { TradeService } from './services/trade.service';
 
 
 @NgModule({
@@ -13,11 +12,12 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
   ],
   imports: [
     BrowserModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFireDatabaseModule,
-    AngularFireAuthModule
+    MainModule
   ],
-  providers: [],
+  providers: [
+    StorageService,
+    TradeService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
