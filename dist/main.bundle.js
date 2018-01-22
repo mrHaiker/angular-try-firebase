@@ -132,7 +132,7 @@ var AppModule = (function () {
 /***/ "../../../../../src/app/main/main.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"coin-header\">\n  <div class=\"container\">\n    <div class=\"coin__header\">\n      <p class=\"coin__ticket m-0\" (click)=\"openPopup()\">{{ coin }}/USD</p>\n      <p class=\"coin__balance m-0\">{{ availableMoney + profit | currency }} </p>\n      <p class=\"coin__profit m-0\">{{ profit | currency }}</p>\n      <div class=\"coin__input\">\n        <input type=\"text\" class=\"form-control\" [(ngModel)]=\"coin\">\n      </div>\n\n      <button class=\"btn btn-secondary ml-2\">\n        <i class=\"fa fa-play\" aria-hidden=\"true\"></i>\n      </button>\n    </div>\n  </div>\n</div>\n\n<div class=\"container\">\n  <hr>\n  <p>Currency price: <span> {{ price | currency }}</span></p>\n\n\n  <hr>\n  <table class=\"table\">\n    <thead>\n    <tr>\n      <th scope=\"col\">#</th>\n      <th scope=\"col\">Open</th>\n      <th scope=\"col\">Count</th>\n      <th scope=\"col\">Close</th>\n      <th scope=\"col\">Profit</th>\n      <th scope=\"col\">Trend</th>\n    </tr>\n    </thead>\n    <tbody>\n    <tr class=\"coin__row\" *ngFor=\"let item of list; let i = index\"\n        [ngClass]=\"{'green': item.profit > 0, 'red': item.profit < 0}\">\n      <th scope=\"row\">{{ i + 1}}</th>\n      <td>{{ item.open | currency}}</td>\n      <td>{{ item.count}}</td>\n      <td>{{ item.close | currency}}</td>\n      <td>\n        {{ item.profit | currency}}\n        <span *ngIf=\"item.status === 1 && item.trend\">({{ currencyProfit | percent:'0.2-2' }})</span>\n      </td>\n      <td>{{ item.trend === -1 ? 'SHORT' : item.trend === 1 ? 'LONG' : 'WAIT'}}</td>\n    </tr>\n    </tbody>\n  </table>\n</div>\n\n\n<div class=\"popup\" *ngIf=\"settings\">\n  <div class=\"popup__over\" (click)=\"openPopup(false)\"></div>\n  <div class=\"popup__window\">\n    <div class=\"form-group\">\n      <label>Loss</label>\n      <input class=\"form-control\" type=\"number\" [(ngModel)]=\"config.loss\"><br>\n\n      <label>Profit</label>\n      <input class=\"form-control\" type=\"number\" [(ngModel)]=\"config.profit\"><br>\n\n      <label>Step</label>\n      <input class=\"form-control\" type=\"number\" [(ngModel)]=\"config.step\"><br>\n\n      <label>Out</label>\n      <input class=\"form-control\" type=\"number\" [(ngModel)]=\"config.hardOut\">\n      <div class=\"popup__btn-wrap\">\n        <button class=\"btn btn-primary\" (click)=\"openPopup(false)\">ok</button>\n      </div>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div class=\"coin-header\">\n  <div class=\"container\">\n    <div class=\"coin__header\">\n      <p class=\"coin__ticket m-0\" (click)=\"openPopup()\">{{ coin }}/USD</p>\n      <p class=\"coin__balance m-0\">{{ availableMoney + profit | currency }} </p>\n      <p class=\"coin__profit m-0\">{{ profit | currency }}</p>\n      <div class=\"coin__input\">\n        <input type=\"text\" class=\"form-control\" [(ngModel)]=\"coin\">\n      </div>\n\n      <button class=\"btn btn-secondary ml-2\">\n        <i class=\"fa fa-play\" aria-hidden=\"true\"></i>\n      </button>\n    </div>\n  </div>\n</div>\n\n<div class=\"container\">\n  <hr>\n  <p>Currency price: <span> {{ price | currency }}</span></p>\n\n\n  <hr>\n  <table class=\"table\">\n    <thead>\n    <tr>\n      <th scope=\"col\">#</th>\n      <th scope=\"col\">Open</th>\n      <th scope=\"col\">Count</th>\n      <th scope=\"col\">Close</th>\n      <th scope=\"col\">Profit</th>\n      <th scope=\"col\">Trend</th>\n    </tr>\n    </thead>\n    <tbody>\n    <tr class=\"coin__row\" *ngFor=\"let item of history; let i = index\"\n        [ngClass]=\"{'green': item.profit > 0, 'red': item.profit < 0}\">\n      <th scope=\"row\">{{ i + 1}}</th>\n      <td>{{ item.open | currency}}</td>\n      <td>{{ item.count}}</td>\n      <td>{{ item.close | currency}}</td>\n      <td>\n        {{ item.profit | currency}}\n        <span *ngIf=\"item.status === 1 && item.trend\">({{ currencyProfit | percent:'0.2-2' }})</span>\n      </td>\n      <td>{{ item.trend === -1 ? 'SHORT' : item.trend === 1 ? 'LONG' : 'WAIT'}}</td>\n    </tr>\n    </tbody>\n  </table>\n</div>\n\n\n<div class=\"popup\" *ngIf=\"settings\">\n  <div class=\"popup__over\" (click)=\"openPopup(false)\"></div>\n  <div class=\"popup__window\">\n    <div class=\"form-group\">\n      <label>Loss</label>\n      <input class=\"form-control\" type=\"number\" [(ngModel)]=\"config.loss\"><br>\n\n      <label>Profit</label>\n      <input class=\"form-control\" type=\"number\" [(ngModel)]=\"config.profit\"><br>\n\n      <label>Step</label>\n      <input class=\"form-control\" type=\"number\" [(ngModel)]=\"config.step\"><br>\n\n      <label>Out</label>\n      <input class=\"form-control\" type=\"number\" [(ngModel)]=\"config.hardOut\">\n      <div class=\"popup__btn-wrap\">\n        <button class=\"btn btn-primary\" (click)=\"openPopup(false)\">ok</button>\n      </div>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -214,6 +214,19 @@ var MainComponent = (function () {
     Object.defineProperty(MainComponent.prototype, "step", {
         get: function () {
             return Number((this.availableMoney / this.price / this.config.hardOut).toFixed(2));
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(MainComponent.prototype, "history", {
+        get: function () {
+            if (this.list.length > 20) {
+                this.list.length = 20;
+                return this.list;
+            }
+            else {
+                return this.list;
+            }
         },
         enumerable: true,
         configurable: true

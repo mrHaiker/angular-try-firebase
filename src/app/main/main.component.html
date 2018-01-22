@@ -33,7 +33,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr class="coin__row" *ngFor="let item of list; let i = index"
+    <tr class="coin__row" *ngFor="let item of history; let i = index"
         [ngClass]="{'green': item.profit > 0, 'red': item.profit < 0}">
       <th scope="row">{{ i + 1}}</th>
       <td>{{ item.open | currency}}</td>

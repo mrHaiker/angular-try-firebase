@@ -39,13 +39,19 @@ export class MainComponent implements OnInit {
     this.trade.history.map(val => profit += val.profit);
     return profit;
   }
-
   get profit(): number {
     return this.currencyProfit + this.historyProfit
   }
-
   get step(): number {
     return Number((this.availableMoney / this.price / this.config.hardOut).toFixed(2));
+  }
+  get history(): Order[] {
+    if (this.list.length > 20) {
+      this.list.length = 20;
+      return this.list;
+    } else {
+      return this.list
+    }
   }
 
 
