@@ -9,6 +9,8 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AuthModule } from './auth/auth.module';
 import { AppRoutingModule } from './app-routing';
 import { AuthGuard } from './auth/auth.guard';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import 'hammerjs';
 
 
 const config = {
@@ -30,6 +32,8 @@ const config = {
     AngularFireModule.initializeApp(config),
     AngularFireDatabaseModule,
     AuthModule,
+
+    BrowserAnimationsModule,
 
     AppRoutingModule
   ],

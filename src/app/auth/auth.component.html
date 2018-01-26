@@ -1,3 +1,45 @@
-<p>
-  auth works!
-</p>
+<div class="auth">
+  <mat-card class="auth-dialog">
+    <mat-card-title class="auth-dialog__title">
+      <mat-toolbar color="primary">
+        <mat-toolbar-row>
+          <span>Login</span>
+        </mat-toolbar-row>
+      </mat-toolbar>
+    </mat-card-title>
+    <mat-card-content>
+      <form class="auth-form" [formGroup]="auth" (submit)="login()">
+        <mat-form-field class="auth-form__full-width">
+          <input matInput placeholder="Email" [formControlName]="'email'">
+          <mat-hint>Errors appear instantly!</mat-hint>
+
+          <mat-error *ngIf="auth.get('email').hasError('email') && !auth.get('email').hasError('required')">
+            Please enter a valid email address
+          </mat-error>
+          <mat-error *ngIf="auth.get('email').hasError('required')">
+            Email is <strong>required</strong>
+          </mat-error>
+
+        </mat-form-field>
+
+        <br>
+        <br>
+        <mat-form-field class="auth-form__full-width">
+          <input matInput placeholder="Password" [formControlName]="'pass'">
+          <mat-hint>Errors appear instantly!</mat-hint>
+
+          <mat-error *ngIf="auth.get('pass').hasError('required')">
+            Password is <strong>required</strong>
+          </mat-error>
+
+        </mat-form-field>
+        <br><br><br>
+        <mat-card-footer>
+          <mat-card-actions class="auth-form__footer">
+            <button mat-raised-button color="primary">Login</button>
+          </mat-card-actions>
+        </mat-card-footer>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
