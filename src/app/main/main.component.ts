@@ -123,6 +123,10 @@ export class MainComponent implements OnInit {
 
 
   private priceListener(): void {
+    this.main.getAny().subscribe(
+      val => console.log('any', val)
+    );
+
     Observable.timer(1, 10000).subscribe(
       () => this.main.getPrice(this.coin).subscribe(
         val => this.price = Number(val.USD)

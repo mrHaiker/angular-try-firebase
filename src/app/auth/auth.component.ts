@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
 import { LoaderService } from '../loader/loader.service';
-import { setTimeout } from 'timers';
 
 @Component({
   selector: 'app-auth',
@@ -12,7 +11,6 @@ import { setTimeout } from 'timers';
 })
 export class AuthComponent implements OnInit {
   public loginForm: FormGroup;
-  public user$ = this.auth.user;
 
   constructor(
     private auth: AuthService,

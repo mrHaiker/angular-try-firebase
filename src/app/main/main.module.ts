@@ -4,12 +4,14 @@ import { MainComponent } from './main.component';
 import { MainService } from './main.service';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
 
 @NgModule({
   imports: [
     CommonModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    AngularFireDatabaseModule
   ],
   declarations: [MainComponent],
   exports: [MainComponent],
