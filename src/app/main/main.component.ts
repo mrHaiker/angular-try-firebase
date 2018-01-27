@@ -20,6 +20,7 @@ export class MainComponent implements OnInit {
   public availableMoney = 10000;
   public settings: boolean;
 
+  private checkedPosition: boolean;
   private config = this.storage.get(LocalStorage.SETTINGS) || {
     loss: 0.1,
     profit: 0.5,
@@ -27,7 +28,6 @@ export class MainComponent implements OnInit {
     hardOut: 10
   };
 
-  private checkedPosition: boolean;
   constructor(
     private storage: StorageService,
     private main: MainService,
@@ -121,18 +121,17 @@ export class MainComponent implements OnInit {
     this.settings = open;
   }
 
+  currency(take: string, get: string): string {
+    return `${take}_${get}`;
+  }
+
 
   private priceListener(): void {
-    this.main.getAny().subscribe(
-      val => console.log('any', val)
-    );
-
-    Observable.timer(1, 10000).subscribe(
-      () => this.main.getPrice(this.coin).subscribe(
-        val => this.price = Number(val.USD)
-      ).add(
-        () => this.checkPosition()
-      )
+    this.main.getByTicked(this.currency('USDT', 'BTC')).subscribe(
+      val => {
+        this.price = Number(val.last);
+        this.checkPosition();
+      }
     )
   }
 
