@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from './auth.service';
+import { Router } from '@angular/router';
+import { LoaderService } from '../loader/loader.service';
+import { setTimeout } from 'timers';
 
 @Component({
   selector: 'app-auth',
@@ -7,21 +11,29 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
   styleUrls: ['./auth.component.scss']
 })
 export class AuthComponent implements OnInit {
-  public auth: FormGroup;
-  public emailFormControl: FormControl;
+  public loginForm: FormGroup;
+  public user$ = this.auth.user;
 
   constructor(
-    private fb: FormBuilder
+    private auth: AuthService,
+    private fb: FormBuilder,
+    private router: Router,
+    private loader: LoaderService
   ) { }
 
   ngOnInit() {
-    this.auth = this.fb.group({
+    this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       pass: ['', Validators.required]
-    })
+    });
   }
 
   login() {
-    console.log('thisAuth', this.auth.value);
+    if (this.loginForm.invalid) return;
+
+    this.loader.show();
+    this.auth.login(this.loginForm.value).subscribe(
+      val => this.router.navigate(['home'])
+    ).add(() => this.loader.hide())
   }
 }

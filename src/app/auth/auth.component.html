@@ -8,15 +8,15 @@
       </mat-toolbar>
     </mat-card-title>
     <mat-card-content>
-      <form class="auth-form" [formGroup]="auth" (submit)="login()">
+      <form class="auth-form" [formGroup]="loginForm" (submit)="login()">
         <mat-form-field class="auth-form__full-width">
           <input matInput placeholder="Email" [formControlName]="'email'">
           <mat-hint>Errors appear instantly!</mat-hint>
 
-          <mat-error *ngIf="auth.get('email').hasError('email') && !auth.get('email').hasError('required')">
+          <mat-error *ngIf="loginForm.get('email').hasError('email') && !loginForm.get('email').hasError('required')">
             Please enter a valid email address
           </mat-error>
-          <mat-error *ngIf="auth.get('email').hasError('required')">
+          <mat-error *ngIf="loginForm.get('email').hasError('required')">
             Email is <strong>required</strong>
           </mat-error>
 
@@ -25,10 +25,10 @@
         <br>
         <br>
         <mat-form-field class="auth-form__full-width">
-          <input matInput placeholder="Password" [formControlName]="'pass'">
+          <input type="password" matInput placeholder="Password" [formControlName]="'pass'">
           <mat-hint>Errors appear instantly!</mat-hint>
 
-          <mat-error *ngIf="auth.get('pass').hasError('required')">
+          <mat-error *ngIf="loginForm.get('pass').hasError('required')">
             Password is <strong>required</strong>
           </mat-error>
 

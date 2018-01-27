@@ -6,11 +6,11 @@ import { AuthComponent } from './auth/auth.component';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'home', component: MainComponent, canActivate: [AuthGuard] },
-  { path: 'login', component: AuthComponent, canActivate: [AuthGuard] },
+  { path: 'login', component: AuthComponent },
 
-  { path: '**', redirectTo: 'login', pathMatch: 'full', canActivate: [AuthGuard] },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '**', redirectTo: 'login' },
 ];
 
 @NgModule({

@@ -11,6 +11,9 @@ import { AppRoutingModule } from './app-routing';
 import { AuthGuard } from './auth/auth.guard';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import 'hammerjs';
+import { UserService } from './services/user.service';
+import { MatProgressSpinnerModule } from '@angular/material';
+import { LoaderModule } from './loader/loader.module';
 
 
 const config = {
@@ -32,6 +35,7 @@ const config = {
     AngularFireModule.initializeApp(config),
     AngularFireDatabaseModule,
     AuthModule,
+    LoaderModule,
 
     BrowserAnimationsModule,
 
@@ -40,7 +44,8 @@ const config = {
   providers: [
     StorageService,
     TradeService,
-    AuthGuard
+    AuthGuard,
+    UserService
   ],
   bootstrap: [AppComponent]
 })
