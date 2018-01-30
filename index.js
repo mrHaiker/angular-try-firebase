@@ -1,5 +1,6 @@
 var express    = require('express');        // call express
 var bodyParser = require('body-parser');
+var axios      = require('axios');
 // let keys       = require('./keys.json');
 
 var app        = express();                 // define our app using express
@@ -25,7 +26,15 @@ router.get('/', function(req, res) {
 
 
 router.get('/returnBalance', function (req, res) {
-  res.json({ message: 'Hello world!!!' });
+  axios.get(PUBLIC_API + '?command=returnTicker')
+    .then(function (val) {
+      const data = val.data;
+      res.json(data);
+    })
+    .catch(function (err) {
+      const data = err.response.data;
+      res.send(data);
+    })
 });
 
 // more routes for our API will happen here
