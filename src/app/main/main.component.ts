@@ -54,6 +54,12 @@ export class MainComponent implements OnInit {
     }
   }
 
+  buy() {
+    this.main.getBalance().subscribe(
+      val => console.log('val', val)
+    );
+  }
+
 
   ngOnInit() {
     this.storage.set(LocalStorage.COIN, this.coin);

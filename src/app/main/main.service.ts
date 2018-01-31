@@ -22,8 +22,6 @@ export class PriceResponse {
 
 @Injectable()
 export class MainService {
-  public apiKey: 'SPVMCMZF-PWS9KCJG-TJ3MS4ZQ-6BFWK7F2';
-  public secret: 'daf74af36e13b430782a687d762eb81cc87ad34be9eb5eca234d8e0f9231da3180496f1e89ddb6029dd72f18a05988af3e70daa437d577481c25aba63a6c337f';
 
   public currencies$ = new Subject<any>();
 
