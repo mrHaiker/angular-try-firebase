@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "preinstall": "ng build",
     "start": "node server/index.js",
     "serve": "ng serve",
     "build": "ng build",
