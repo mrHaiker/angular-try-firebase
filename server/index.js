@@ -43,7 +43,9 @@ router.get('/returnBalance', function (req, res) {
 // all of our routes will be prefixed with /api
 app.use('/api', router);
 
+// Serve only the static files form the dist directory
+app.use(express.static(__dirname + '/dist'));
+
 // START THE SERVER
 // =============================================================================
 app.listen(port);
-console.log('Magic happens on port ' + port);
