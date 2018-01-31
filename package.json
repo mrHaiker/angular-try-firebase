@@ -1,9 +1,9 @@
 {
-  "name": "chat",
+  "name": "trade",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js",
+    "start": "node server/index.js",
     "serve": "ng serve",
     "build": "ng build",
     "deploy:heroku": "git push heroku master",
