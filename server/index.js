@@ -12,12 +12,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 let port = process.env.PORT || 3000;        // set our port
-let PUBLIC_API = 'https://poloniex.com/public';
-let PRIVATE_API = 'https://poloniex.com/tradingApi';
 
-let poloniex = new Poloniex();
+let poloniex = new Poloniex('awdaw', 'awdawd');
 //
-let ticketRequest;
+let ticketRequest = 2;
 
 // ROUTES FOR OUR API
 // =============================================================================
