@@ -1,6 +1,6 @@
 let express    = require('express');        // call express
 let bodyParser = require('body-parser');
-let Poloniex   = require('./poloniex.js');
+let Poloniex   = require('./poloniex');
 let keys       = require('./keys.json');
 let app        = express();                 // define our app using express
 let expressWs  = require('express-ws')(app);
@@ -16,8 +16,7 @@ let PUBLIC_API = 'https://poloniex.com/public';
 let PRIVATE_API = 'https://poloniex.com/tradingApi';
 
 let poloniex = new Poloniex();
-
-let counter = 0;
+//
 let ticketRequest;
 
 // ROUTES FOR OUR API
@@ -38,7 +37,7 @@ router.ws('/tickets', function(ws, req) {
   setInterval(
     () => {
       if (ws.readyState === 1) {
-        ws.send(new Date().getTime())
+        ws.send(ticketRequest)
       }
     }, 1000
   )
@@ -54,10 +53,10 @@ app.use(express.static(__dirname + '/dist'));
 
 // START THE SERVER
 // =============================================================================
-app.listen(port);
-console.log('start on', port);
+app.listen(port, () => {
+  console.log('start on', port);
+});
 
-getTickets();
 
 setInterval(
   () => getTickets(), 1000
@@ -67,8 +66,7 @@ setInterval(
 function getTickets() {
   poloniex.getTicker((err, data) => {
     if (err){
-      console.log('ERROR', err);
-      return;
+      return ticketRequest = err;
     }
 
     ticketRequest = data;
