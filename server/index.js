@@ -31,6 +31,16 @@ router.get('/returnBalance', function (req, res) {
   res.send('it\'s work');
 });
 
+router.get('/returnBalance', function (req, res) {
+  poloniex.getTicker((err, data) => {
+    if (err){
+      res.send(err);
+    }
+
+    res.send(data);
+  });
+});
+
 router.ws('/tickets', function(ws, req) {
   setInterval(
     () => {
