@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "postinstall": "ng build --aot -prod  --progress",
+    "postinstall": "ng build --aot -prod  --progress -d server/dist",
     "start": "node ./server/server.js",
     "serve": "ng serve",
     "build": "ng build",
