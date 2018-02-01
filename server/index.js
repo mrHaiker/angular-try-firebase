@@ -31,15 +31,15 @@ router.get('/returnBalance', function (req, res) {
   res.send('it\'s work');
 });
 
-router.ws('/tickets', function(ws, req) {
-  setInterval(
-    () => {
-      if (ws.readyState === 1) {
-        ws.send(ticketRequest)
-      }
-    }, 1000
-  )
-});
+// router.ws('/tickets', function(ws, req) {
+//   setInterval(
+//     () => {
+//       if (ws.readyState === 1) {
+//         ws.send(ticketRequest)
+//       }
+//     }, 1000
+//   )
+// });
 
 
 
@@ -56,17 +56,17 @@ app.listen(port, () => {
 });
 
 
-setInterval(
-  () => getTickets(), 1000
-);
-
-
-function getTickets() {
-  poloniex.getTicker((err, data) => {
-    if (err){
-      return ticketRequest = err;
-    }
-
-    ticketRequest = data;
-  });
-}
+// setInterval(
+//   () => getTickets(), 1000
+// );
+//
+//
+// function getTickets() {
+//   poloniex.getTicker((err, data) => {
+//     if (err){
+//       return ticketRequest = err;
+//     }
+//
+//     ticketRequest = data;
+//   });
+// }
