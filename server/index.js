@@ -35,20 +35,20 @@ router.get('/returnBalance', function (req, res) {
   res.send('it\'s work');
 });
 
-router.ws('/tickets', function(ws, req) {
-  ws.on('close', (user) => {
-    console.log('socket was closed', user);
-  });
-
-
-  setInterval(
-    () => {
-      if (ws.readyState === 1) {
-        ws.send(new Date().getTime())
-      }
-    }, 1000
-  )
-});
+// router.ws('/tickets', function(ws, req) {
+//   ws.on('close', (user) => {
+//     console.log('socket was closed', user);
+//   });
+//
+//
+//   setInterval(
+//     () => {
+//       if (ws.readyState === 1) {
+//         ws.send(new Date().getTime())
+//       }
+//     }, 1000
+//   )
+// });
 
 
 // // REGISTER OUR ROUTES -------------------------------
