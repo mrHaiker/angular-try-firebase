@@ -10,7 +10,7 @@ module.exports = (function () {
   var version = '0.0.8',
     PUBLIC_API_URL = 'https://poloniex.com/public',
     PRIVATE_API_URL = 'https://poloniex.com/tradingApi',
-    USER_AGENT = 'server/poloniex.js ' + version;
+    USER_AGENT = 'poloniex.js ' + version;
   //USER_AGENT  = 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:26.0) Gecko/20100101 Firefox/26.0'
 
   // Helper methods

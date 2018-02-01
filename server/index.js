@@ -1,8 +1,8 @@
-let express    = require('express');        // call express
+let express    = require('express');
 let bodyParser = require('body-parser');
-// let Poloniex   = require('./poloniex');
+let Poloniex   = require('./poloniex');
 let keys       = require('./keys.json');
-let app        = express();                 // define our app using express
+let app        = express();
 let expressWs  = require('express-ws')(app);
 
 
@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 
 let port = process.env.PORT || 3000;        // set our port
 
-// let poloniex = new Poloniex('awdaw', 'awdawd');
+let poloniex = new Poloniex('awdaw', '123123sadw');
 //
 let ticketRequest = 2;
 
@@ -56,17 +56,17 @@ app.listen(port, () => {
 });
 
 
-// setInterval(
-//   () => getTickets(), 1000
-// );
-//
-//
-// function getTickets() {
-//   poloniex.getTicker((err, data) => {
-//     if (err){
-//       return ticketRequest = err;
-//     }
-//
-//     ticketRequest = data;
-//   });
-// }
+setInterval(
+  () => getTickets(), 1000
+);
+
+
+function getTickets() {
+  poloniex.getTicker((err, data) => {
+    if (err){
+      return ticketRequest = err;
+    }
+
+    ticketRequest = data;
+  });
+}
