@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "postinstall": "ng build --aot -prod --progress -op server/dist",
-    "start": "node ./server/server.js",
+    "start": "node ./server/index.js",
     "serve": "ng serve",
     "build": "ng build --aot -prod --progress -op server/dist",
     "deploy:heroku": "ng build && git push heroku master",
