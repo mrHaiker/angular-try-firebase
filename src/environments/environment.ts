@@ -12,5 +12,6 @@ export const environment = {
     projectId: "fire-chat-8a33a",
     storageBucket: "fire-chat-8a33a.appspot.com",
     messagingSenderId: "799525476658"
-  }
+  },
+  server: '//trading-api-93787.herokuapp.com/api/'
 };

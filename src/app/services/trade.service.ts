@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { LocalStorage, StorageService } from './storage.service';
 import { Subject } from 'rxjs/Subject';
+import { environment } from '../../environments/environment';
 
 export enum OrderStatus {
   CLOSE = 0,
@@ -50,8 +51,9 @@ export class TradeService {
   }
 
   connectToTicketsStream(): void {
-    console.log('try to connectToTicketsStream');
-    const ws = new WebSocket('ws://trading-api-93787.herokuapp.com/api/tickets');
+    console.log('try to connectToTicketsStream', environment.server);
+
+    const ws = new WebSocket(`ws:${environment.server}/tickets`);
     ws.onmessage = (ev) => this.ticketsStream$.next(JSON.parse(ev.data));
   }
 }

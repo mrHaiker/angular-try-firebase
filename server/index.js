@@ -1,8 +1,7 @@
 let express    = require('express');        // call express
 let bodyParser = require('body-parser');
-// let axios      = require('axios');
-// let Poloniex   = require('./poloniex.js');
-// let keys       = require('./keys.json');
+let Poloniex   = require('./poloniex.js');
+let keys       = require('./keys.json');
 let app        = express();                 // define our app using express
 let expressWs  = require('express-ws')(app);
 
@@ -16,7 +15,7 @@ let port = process.env.PORT || 3000;        // set our port
 let PUBLIC_API = 'https://poloniex.com/public';
 let PRIVATE_API = 'https://poloniex.com/tradingApi';
 
-// let poloniex = new Poloniex();
+let poloniex = new Poloniex();
 
 let counter = 0;
 let ticketRequest;
@@ -36,11 +35,6 @@ router.get('/returnBalance', function (req, res) {
 });
 
 router.ws('/tickets', function(ws, req) {
-  ws.on('close', (user) => {
-    console.log('socket was closed', user);
-  });
-
-
   setInterval(
     () => {
       if (ws.readyState === 1) {
@@ -63,20 +57,20 @@ app.use(express.static(__dirname + '/dist'));
 app.listen(port);
 console.log('start on', port);
 
-// getTickets();
+getTickets();
 
-// setInterval(
-//   () => getTickets(), 1000
-// );
-//
-//
-// function getTickets() {
-//   poloniex.getTicker((err, data) => {
-//     if (err){
-//       console.log('ERROR', err);
-//       return;
-//     }
-//
-//     ticketRequest = data;
-//   });
-// }
+setInterval(
+  () => getTickets(), 1000
+);
+
+
+function getTickets() {
+  poloniex.getTicker((err, data) => {
+    if (err){
+      console.log('ERROR', err);
+      return;
+    }
+
+    ticketRequest = data;
+  });
+}
