@@ -1,8 +1,8 @@
 let express    = require('express');        // call express
 let bodyParser = require('body-parser');
-let axios      = require('axios');
-let Poloniex   = require('./poloniex.js');
-let keys       = require('./keys.json');
+// let axios      = require('axios');
+// let Poloniex   = require('./poloniex.js');
+// let keys       = require('./keys.json');
 let app        = express();                 // define our app using express
 let expressWs  = require('express-ws')(app);
 
@@ -16,7 +16,7 @@ let port = process.env.PORT || 3000;        // set our port
 let PUBLIC_API = 'https://poloniex.com/public';
 let PRIVATE_API = 'https://poloniex.com/tradingApi';
 
-let poloniex = new Poloniex();
+// let poloniex = new Poloniex();
 
 let counter = 0;
 let ticketRequest;
