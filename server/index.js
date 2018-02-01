@@ -4,7 +4,7 @@ let bodyParser = require('body-parser');
 // let Poloniex   = require('./poloniex.js');
 // let keys       = require('./keys.json');
 let app        = express();                 // define our app using express
-// let expressWs  = require('express-ws')(app);
+let expressWs  = require('express-ws')(app);
 
 
 // configure app to use bodyParser()
@@ -35,20 +35,20 @@ router.get('/returnBalance', function (req, res) {
   res.send('it\'s work');
 });
 
-// router.ws('/tickets', function(ws, req) {
-//   ws.on('close', (user) => {
-//     console.log('socket was closed', user);
-//   });
-//
-//
-//   setInterval(
-//     () => {
-//       if (ws.readyState === 1) {
-//         ws.send(new Date().getTime())
-//       }
-//     }, 1000
-//   )
-// });
+router.ws('/tickets', function(ws, req) {
+  ws.on('close', (user) => {
+    console.log('socket was closed', user);
+  });
+
+
+  setInterval(
+    () => {
+      if (ws.readyState === 1) {
+        ws.send(new Date().getTime())
+      }
+    }, 1000
+  )
+});
 
 
 
