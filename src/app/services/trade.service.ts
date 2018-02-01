@@ -51,7 +51,7 @@ export class TradeService {
 
   connectToTicketsStream(): void {
     console.log('try to connectToTicketsStream');
-    const ws = new WebSocket('ws://localhost:3000/api/tickets');
+    const ws = new WebSocket('ws://trading-api-93787.herokuapp.com/api/tickets');
     ws.onmessage = (ev) => this.ticketsStream$.next(JSON.parse(ev.data));
   }
 }

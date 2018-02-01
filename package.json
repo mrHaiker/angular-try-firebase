@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "postinstall": "ng build --aot -prod --progress -op server/dist",
     "start": "node ./server/index.js",
     "serve": "ng serve",
     "build": "ng build --aot -prod --progress -op server/dist",
@@ -38,7 +37,6 @@
     "@types/jasmine": "~2.5.53",
     "@types/jasminewd2": "~2.0.2",
     "@types/node": "~6.0.60",
-    "axios": "^0.17.1",
     "body-parser": "^1.18.2",
     "codelyzer": "~3.2.0",
     "crypto": "^1.0.1",
