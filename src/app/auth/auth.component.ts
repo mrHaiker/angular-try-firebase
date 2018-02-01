@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
 import { LoaderService } from '../loader/loader.service';
+import { TradeService } from '../services/trade.service';
 
 @Component({
   selector: 'app-auth',
@@ -16,7 +17,8 @@ export class AuthComponent implements OnInit {
     private auth: AuthService,
     private fb: FormBuilder,
     private router: Router,
-    private loader: LoaderService
+    private loader: LoaderService,
+    private tradeService: TradeService
   ) { }
 
   ngOnInit() {
@@ -24,6 +26,10 @@ export class AuthComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       pass: ['', Validators.required]
     });
+
+    this.tradeService.ticketsStream$.subscribe(
+      val => console.log('val', val)
+    )
   }
 
   login() {

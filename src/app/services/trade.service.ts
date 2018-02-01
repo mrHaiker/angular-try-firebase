@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { LocalStorage, StorageService } from './storage.service';
+import { Subject } from 'rxjs/Subject';
 
 export enum OrderStatus {
   CLOSE = 0,
@@ -15,15 +16,17 @@ export enum OrderTrend {
 
 @Injectable()
 export class TradeService {
+  public ticketsStream$ = new Subject<any>();
 
   constructor(
     private storage: StorageService
-  ) { }
+  ) {
+    this.connectToTicketsStream();
+  }
 
   get position(): Order {
     return this.storage.get(LocalStorage.POSITION);
   }
-
   get history(): Order[] {
     return this.storage.get(LocalStorage.HISTORY) || [];
   }
@@ -46,6 +49,11 @@ export class TradeService {
     return order;
   }
 
+  connectToTicketsStream(): void {
+    console.log('try to connectToTicketsStream');
+    const ws = new WebSocket('ws://localhost:3000/api/tickets');
+    ws.onmessage = (ev) => this.ticketsStream$.next(JSON.parse(ev.data));
+  }
 }
 
 export class Order {
