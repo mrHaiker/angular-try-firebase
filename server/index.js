@@ -31,7 +31,7 @@ router.get('/returnBalance', function (req, res) {
   res.send('it\'s work');
 });
 
-router.get('/returnBalance', function (req, res) {
+router.get('/returnTickets', function (req, res) {
   poloniex.getTicker((err, data) => {
     if (err){
       res.send(err);
