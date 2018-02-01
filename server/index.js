@@ -4,7 +4,7 @@ let bodyParser = require('body-parser');
 // let Poloniex   = require('./poloniex.js');
 // let keys       = require('./keys.json');
 let app        = express();                 // define our app using express
-let expressWs  = require('express-ws')(app);
+// let expressWs  = require('express-ws')(app);
 
 
 // configure app to use bodyParser()
@@ -32,15 +32,7 @@ router.get('/', function(req, res) {
 
 
 router.get('/returnBalance', function (req, res) {
-  axios.get(PUBLIC_API + '?command=returnTicker')
-    .then(function (val) {
-      const data = val.data;
-      res.json(data);
-    })
-    .catch(function (err) {
-      const data = err.response.data;
-      res.send(data);
-    })
+  res.send('it\'s work');
 });
 
 router.ws('/tickets', function(ws, req) {
