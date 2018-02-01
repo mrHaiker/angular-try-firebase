@@ -44,7 +44,7 @@ let PRIVATE_API = 'https://poloniex.com/tradingApi';
 // app.use('/api', router);
 
 // Serve only the static files form the dist directory
-app.use(express.static(__dirname + '/test'));
+app.use(express.static(__dirname + './test'));
 
 // START THE SERVER
 // =============================================================================
