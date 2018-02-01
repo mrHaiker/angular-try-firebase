@@ -2,7 +2,7 @@ let express    = require('express');        // call express
 let bodyParser = require('body-parser');
 let axios      = require('axios');
 let Poloniex   = require('./poloniex.js');
-let keys       = require('../keys.json');
+let keys       = require('./keys.json');
 let app        = express();                 // define our app using express
 let expressWs  = require('express-ws')(app);
 
@@ -52,7 +52,7 @@ router.ws('/tickets', function(ws, req) {
   setInterval(
     () => {
       if (ws.readyState === 1) {
-        ws.send(ticketRequest)
+        ws.send(new Date().getTime())
       }
     }, 1000
   )
@@ -70,20 +70,20 @@ app.use(express.static(__dirname + '/dist'));
 app.listen(port);
 console.log('start on', port);
 
-getTickets();
+// getTickets();
 
-setInterval(
-  () => getTickets(), 1000
-);
-
-
-function getTickets() {
-  poloniex.getTicker((err, data) => {
-    if (err){
-      console.log('ERROR', err);
-      return;
-    }
-
-    ticketRequest = data;
-  });
-}
+// setInterval(
+//   () => getTickets(), 1000
+// );
+//
+//
+// function getTickets() {
+//   poloniex.getTicker((err, data) => {
+//     if (err){
+//       console.log('ERROR', err);
+//       return;
+//     }
+//
+//     ticketRequest = data;
+//   });
+// }
