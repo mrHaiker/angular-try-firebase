@@ -9,8 +9,8 @@ let app        = express();                 // define our app using express
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 let port = process.env.PORT || 3000;        // set our port
 let PUBLIC_API = 'https://poloniex.com/public';
