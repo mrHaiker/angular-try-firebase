@@ -15,9 +15,7 @@ let port = process.env.PORT || 4000;        // set our port
 
 let poloniex = new Poloniex('awdaw', '123123sadw');
 //
-let ticketRequest = {
-  name: 2
-};
+let ticketRequest;
 
 // ROUTES FOR OUR API
 // =============================================================================
@@ -25,7 +23,7 @@ let router = express.Router();              // get an instance of the express Ro
 
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 router.get('/', function(req, res) {
-  res.json({ message: 'hooray! welcome to our api! ' + ticketRequest.name });
+  res.json({ message: 'hooray! welcome to our api!' });
 });
 
 
@@ -69,17 +67,15 @@ app.listen(port, () => {
 });
 
 
-// setInterval(() => getTickets(), 1000);
-//
-//
-// function getTickets() {
-//   // poloniex.getTicker((err, data) => {
-//   //   if (err){
-//   //     return ticketRequest = err;
-//   //   }
-//   //
-//   //   ticketRequest = data;
-//   // });
-//
-//   ticketRequest.name++
-// }
+setInterval(() => getTickets(), 1000);
+
+
+function getTickets() {
+  poloniex.getTicker((err, data) => {
+    if (err){
+      return ticketRequest = err;
+    }
+
+    ticketRequest = data;
+  });
+}
