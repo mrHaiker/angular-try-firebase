@@ -19,7 +19,7 @@ export class AuthComponent implements OnInit {
     private router: Router,
     private loader: LoaderService,
     private tradeService: TradeService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.loginForm = this.fb.group({
@@ -29,7 +29,7 @@ export class AuthComponent implements OnInit {
 
     this.tradeService.ticketsStream$.subscribe(
       val => console.log('val', val)
-    )
+    );
   }
 
   login() {
@@ -38,6 +38,10 @@ export class AuthComponent implements OnInit {
     this.loader.show();
     this.auth.login(this.loginForm.value).subscribe(
       val => this.router.navigate(['home'])
-    ).add(() => this.loader.hide())
+    ).add(() => this.loader.hide());
+  }
+
+  getData() {
+    console.log('should get data');
   }
 }

@@ -56,6 +56,8 @@ export class TradeService {
     const ws = new WebSocket(`ws:${environment.server}/tickets`);
     ws.onmessage = (ev) => this.ticketsStream$.next(JSON.parse(ev.data));
   }
+
+
 }
 
 export class Order {
