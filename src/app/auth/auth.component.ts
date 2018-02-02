@@ -18,7 +18,6 @@ export class AuthComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private loader: LoaderService,
-    private tradeService: TradeService
   ) {}
 
   ngOnInit() {
@@ -26,10 +25,6 @@ export class AuthComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       pass: ['', Validators.required]
     });
-
-    this.tradeService.ticketsStream$.subscribe(
-      val => console.log('val', val)
-    );
   }
 
   login() {
@@ -43,8 +38,5 @@ export class AuthComponent implements OnInit {
 
   getData() {
     console.log('should get data');
-    this.tradeService.getPair().subscribe(
-      val => console.log('getData val', val)
-    );
   }
 }

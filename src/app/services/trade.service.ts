@@ -4,6 +4,7 @@ import { Subject } from 'rxjs/Subject';
 import { environment } from '../../environments/environment';
 import {Observable} from "rxjs/Observable";
 import {HttpClient} from "@angular/common/http";
+import { PriceResponse } from '../main/main.service';
 
 export enum OrderStatus {
   CLOSE = 0,
@@ -19,14 +20,10 @@ export enum OrderTrend {
 
 @Injectable()
 export class TradeService {
-  public ticketsStream$ = new Subject<any>();
 
   constructor(
-    private storage: StorageService,
-    private http: HttpClient
-  ) {
-    this.connectToTicketsStream();
-  }
+    private storage: StorageService
+  ) {}
 
   get position(): Order {
     return this.storage.get(LocalStorage.POSITION);
@@ -51,17 +48,6 @@ export class TradeService {
     this.storage.set(LocalStorage.HISTORY, history);
 
     return order;
-  }
-
-  connectToTicketsStream(): void {
-    console.log('try to connectToTicketsStream', environment.server);
-
-    const ws = new WebSocket(`ws:/tickets`);
-    ws.onmessage = (ev) => this.ticketsStream$.next(JSON.parse(ev.data));
-  }
-
-  getPair(): Observable<any> {
-    return this.http.post(`${environment.server}/returnTickets`, {pair: 'BTC_STR'});
   }
 }
 

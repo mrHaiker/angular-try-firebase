@@ -22,9 +22,9 @@ export class MainComponent implements OnInit {
 
   private checkedPosition: boolean;
   private config = this.storage.get(LocalStorage.SETTINGS) || {
-    loss: 0.1,
-    profit: 0.5,
-    step: 0.1,
+    loss: 1,
+    profit: 5,
+    step: 0.2,
     hardOut: 10
   };
 
@@ -50,7 +50,7 @@ export class MainComponent implements OnInit {
       this.list.length = 20;
       return this.list;
     } else {
-      return this.list
+      return this.list;
     }
   }
 
@@ -77,8 +77,8 @@ export class MainComponent implements OnInit {
         this.openPosition(OrderTrend.LONG);
 
     } else {
-      (this.currencyProfit *100) <= this.config.loss * -1 ? this.invertPosition() :
-        (this.currencyProfit *100) >= this.config.profit ? this.closePosition() : null;
+      (this.currencyProfit * 100) <= this.config.loss * -1 ? this.invertPosition() :
+        (this.currencyProfit * 100) >= this.config.profit ? this.closePosition() : null;
     }
 
   }
@@ -112,7 +112,7 @@ export class MainComponent implements OnInit {
     if (order.status !== OrderStatus.OPEN) return;
 
     order.profit = (this.price - order.open) * order.count * order.trend;
-    return order
+    return order;
   }
 
   openPopup(open = true): void {
@@ -127,12 +127,12 @@ export class MainComponent implements OnInit {
 
 
   private priceListener(): void {
-    this.main.getByTicked(this.currency('USDT', 'BTC')).subscribe(
+    this.main.currencies$.subscribe(
       val => {
         this.price = Number(val.last);
         this.checkPosition();
       }
-    )
+    );
   }
 
   private checkPosition(force?: boolean): void {
