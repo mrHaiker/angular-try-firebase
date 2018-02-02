@@ -11,7 +11,7 @@ let expressWs  = require('express-ws')(app);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-let port = process.env.PORT || 3000;        // set our port
+let port = process.env.PORT || 4000;        // set our port
 
 let poloniex = new Poloniex('awdaw', '123123sadw');
 //
@@ -40,7 +40,7 @@ router.post('/returnTickets', function (req, res) {
       res.send(err);
     }
 
-    res.send(data[params.pair]);
+    res.send(data[params.pair] || params);
   });
 });
 
@@ -69,17 +69,17 @@ app.listen(port, () => {
 });
 
 
-setInterval(() => getTickets(), 1000);
-
-
-function getTickets() {
-  // poloniex.getTicker((err, data) => {
-  //   if (err){
-  //     return ticketRequest = err;
-  //   }
-  //
-  //   ticketRequest = data;
-  // });
-
-  ticketRequest.name++
-}
+// setInterval(() => getTickets(), 1000);
+//
+//
+// function getTickets() {
+//   // poloniex.getTicker((err, data) => {
+//   //   if (err){
+//   //     return ticketRequest = err;
+//   //   }
+//   //
+//   //   ticketRequest = data;
+//   // });
+//
+//   ticketRequest.name++
+// }
