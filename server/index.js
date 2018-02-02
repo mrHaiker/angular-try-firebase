@@ -46,7 +46,7 @@ router.ws('/tickets', function(ws, req) {
   setInterval(
     () => {
       if (ws.readyState === 1) {
-        ws.json({id: ticketRequest})
+        ws.send({data: ticketRequest})
       }
     }, 1000
   )
