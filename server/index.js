@@ -32,6 +32,7 @@ router.get('/returnBalance', function (req, res) {
 });
 
 router.get('/returnTickets', function (req, res) {
+  console.log('res', res)
   poloniex.getTicker((err, data) => {
     if (err){
       res.send(err);
@@ -45,7 +46,7 @@ router.ws('/tickets', function(ws, req) {
   setInterval(
     () => {
       if (ws.readyState === 1) {
-        ws.send(ticketRequest)
+        ws.json({id: ticketRequest})
       }
     }, 1000
   )
