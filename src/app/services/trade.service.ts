@@ -56,12 +56,12 @@ export class TradeService {
   connectToTicketsStream(): void {
     console.log('try to connectToTicketsStream', environment.server);
 
-    const ws = new WebSocket(`ws:${environment.server}/tickets`);
+    const ws = new WebSocket(`ws:/tickets`);
     ws.onmessage = (ev) => this.ticketsStream$.next(JSON.parse(ev.data));
   }
 
   getPair(): Observable<any> {
-    return this.http.post('http://localhost:4000/api/returnTickets', {pair: 'BTC_STR'});
+    return this.http.post(`${environment.server}/returnTickets`, {pair: 'BTC_STR'});
   }
 }
 
