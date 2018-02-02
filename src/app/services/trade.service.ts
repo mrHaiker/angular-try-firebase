@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { LocalStorage, StorageService } from './storage.service';
 import { Subject } from 'rxjs/Subject';
 import { environment } from '../../environments/environment';
+import { Observable } from 'rxjs/Observable';
+import { HttpClient } from '@angular/common/http';
 
 export enum OrderStatus {
   CLOSE = 0,
@@ -20,7 +22,8 @@ export class TradeService {
   public ticketsStream$ = new Subject<any>();
 
   constructor(
-    private storage: StorageService
+    private storage: StorageService,
+    private http: HttpClient
   ) {
     this.connectToTicketsStream();
   }
@@ -57,7 +60,9 @@ export class TradeService {
     ws.onmessage = (ev) => this.ticketsStream$.next(JSON.parse(ev.data));
   }
 
-
+  getPair(): Observable<any> {
+    return this.http.post(environment.server + '/returnTickets', {pair: 'BTC_STR'});
+  }
 }
 
 export class Order {

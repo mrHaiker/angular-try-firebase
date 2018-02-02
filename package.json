@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "node ./server/index.js",
+    "start": "node %NODE_DEBUG_OPTION% ./server/index.js",
     "serve": "ng serve",
     "build": "ng build --aot -prod --progress -op server/dist",
     "deploy:heroku": "ng build && git push heroku master",

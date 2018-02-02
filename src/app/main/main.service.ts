@@ -22,7 +22,6 @@ export class PriceResponse {
 
 @Injectable()
 export class MainService {
-
   public currencies$ = new Subject<any>();
 
   constructor(
@@ -38,7 +37,7 @@ export class MainService {
   }
 
   getByTicked(ticked): Observable<PriceResponse> {
-    return this.currencies$.map(val => val[ticked])
+    return this.currencies$.map(val => val[ticked]);
   }
 
   private getRequestOptionArgs(options?) {

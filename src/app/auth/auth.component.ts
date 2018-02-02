@@ -43,5 +43,8 @@ export class AuthComponent implements OnInit {
 
   getData() {
     console.log('should get data');
+    this.tradeService.getPair().subscribe(
+      val => console.log('getData val', val)
+    );
   }
 }

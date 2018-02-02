@@ -10,10 +10,10 @@ import { AuthModule } from './auth/auth.module';
 import { AppRoutingModule } from './app-routing';
 import { AuthGuard } from './auth/auth.guard';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import 'hammerjs';
 import { UserService } from './services/user.service';
-import { MatProgressSpinnerModule } from '@angular/material';
 import { LoaderModule } from './loader/loader.module';
+import { HttpClientModule } from '@angular/common/http';
+import 'hammerjs';
 
 
 const config = {
@@ -36,6 +36,7 @@ const config = {
     AngularFireDatabaseModule,
     AuthModule,
     LoaderModule,
+    HttpClientModule,
 
     BrowserAnimationsModule,
 
