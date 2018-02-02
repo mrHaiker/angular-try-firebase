@@ -55,7 +55,7 @@ export class MainService {
   connectToTicketsStream(): void {
     console.log('try to connectToTicketsStream', environment.server);
 
-    const ws = new WebSocket(`ws:/tickets`);
+    const ws = new WebSocket(`ws:${environment.server}/tickets`);
     ws.onmessage = (ev) => this.ticketsStream$.next(JSON.parse(ev.data));
   }
 }
