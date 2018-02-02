@@ -23,7 +23,7 @@ let router = express.Router();              // get an instance of the express Ro
 
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 router.get('/', function(req, res) {
-  res.json({ message: 'hooray! welcome to our api! 2' });
+  res.json({ message: 'hooray! welcome to our api! ' + ticketRequest });
 });
 
 
@@ -32,7 +32,7 @@ router.get('/returnBalance', function (req, res) {
 });
 
 router.get('/returnTickets', function (req, res) {
-  console.log('res', res)
+  console.log('res', res);
   poloniex.getTicker((err, data) => {
     if (err){
       res.send(err);
