@@ -15,7 +15,9 @@ let port = process.env.PORT || 3000;        // set our port
 
 let poloniex = new Poloniex('awdaw', '123123sadw');
 //
-let ticketRequest = 2;
+let ticketRequest = {
+  name: 2
+};
 
 // ROUTES FOR OUR API
 // =============================================================================
@@ -31,7 +33,7 @@ router.get('/returnBalance', function (req, res) {
   res.send('it\'s work');
 });
 
-router.get('/returnTickets', function (req, res) {
+router.post('/returnTickets', function (req, res) {
   console.log('res', res);
   poloniex.getTicker((err, data) => {
     if (err){
@@ -46,7 +48,7 @@ router.ws('/tickets', function(ws, req) {
   setInterval(
     () => {
       if (ws.readyState === 1) {
-        ws.send({data: ticketRequest})
+        ws.send(ticketRequest)
       }
     }, 1000
   )
@@ -79,5 +81,5 @@ function getTickets() {
   //   ticketRequest = data;
   // });
 
-  ticketRequest++
+  ticketRequest.name++
 }
