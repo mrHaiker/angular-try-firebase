@@ -67,7 +67,7 @@ app.listen(port, () => {
 });
 
 
-setInterval(() => getTickets(), 1000);
+setInterval(() => getTickets(), 750);
 
 
 function getTickets() {

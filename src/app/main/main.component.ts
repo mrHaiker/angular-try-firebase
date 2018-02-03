@@ -129,7 +129,8 @@ export class MainComponent implements OnInit {
   private priceListener(): void {
     this.main.currencies$.subscribe(
       val => {
-        this.price = Number(val.last);
+        const currency = val['BTC_STR'];
+        this.price = currency.last;
         this.checkPosition();
       }
     );
