@@ -25,8 +25,8 @@ export class MainComponent implements OnInit {
 
   private checkedPosition: boolean;
   private config = this.storage.get(LocalStorage.SETTINGS) || {
-    loss: 1,
-    profit: 5,
+    loss: 0.5,
+    profit: 1,
     step: 0.2,
     hardOut: 10
   };
@@ -48,7 +48,7 @@ export class MainComponent implements OnInit {
     return this.currencyProfit + this.historyProfit;
   }
   get step(): number {
-    return Number((this.availableMoney / this.price / this.config.hardOut).toFixed(2));
+    return Number(((this.availableMoney - this.availableMoney / 100 * 15) / this.price / this.config.hardOut).toFixed(2));
   }
   get BTCPrice(): number {
     return Number(this.trade.BTC ? this.trade.BTC.last : 0);
@@ -181,14 +181,35 @@ export class MainComponent implements OnInit {
   }
 
   openPosition(trend: OrderTrend, count = this.step): void {
-    this.trade.openPosition(this.price, trend, count);
-    this.checkPosition(true);
+    const rate = this.price / 100 * 3;
+    this.trade.marginBuy(this.keys.value, {
+      currencyA: 'BTC',
+      currencyB: 'STR',
+      rate: trend === OrderTrend.SHORT ? Number(this.price) - rate : Number(this.price) + rate,
+      amount: count,
+      lendingRate: 0.05
+    }).subscribe(
+      val => {
+        console.log('Position was closed', val);
+        this.trade.openPosition(this.price, trend, count);
+        this.checkPosition(true);
+      }
+    );
   }
 
   closePosition(): void {
-    this.trade.closePosition(this.price, this.order);
-    this.order = this.trade.openPosition(this.price, OrderTrend.WAIT, 0);
-    this.checkPosition(true);
+    this.trade.closeMarginPosition(this.keys.value, {
+      currencyA: 'BTC',
+      currencyB: 'STR',
+    }).subscribe(
+      val => {
+        console.log('Position was closed', val);
+        this.trade.closePosition(this.price, this.order);
+
+        this.order = this.trade.openPosition(this.price, OrderTrend.WAIT, 0);
+        this.checkPosition(true);
+      }
+    )
   }
 
   getCurrProfitInPer(): number {
