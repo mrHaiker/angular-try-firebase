@@ -3,7 +3,7 @@ import { MainService } from './main.service';
 import { Observable } from 'rxjs/Observable';
 import { Order, OrderStatus, OrderTrend, TradeService } from '../../services/trade.service';
 import { LocalStorage, StorageService } from '../../services/storage.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import 'rxjs/add/observable/timer';
 import { setTimeout } from 'timers';
 
@@ -77,7 +77,12 @@ export class MainComponent implements OnInit {
 
     this.checkPosition().then(() => {
       Observable.timer(1, 1000).subscribe((val) => this.cycle(val));
-    })
+    });
+
+    Observable.timer(1, 30000).subscribe(() => {
+      if (this.keys.invalid) return;
+      this.trade.getTradableBalances(this.keys.value).subscribe();
+    });
   }
 
   getAvailableMoney() {
@@ -108,6 +113,18 @@ export class MainComponent implements OnInit {
 
   getMarginAccountSummary(): void {
     this.trade.getMarginAccountSummary(this.keys.value).subscribe(value => console.log('balance value', value));
+  }
+
+  buy() {
+    this.trade.marginBuy(this.keys.value, {
+      currencyA: 'STR',
+      currencyB: 'BTC',
+      rate: 0.00004555,
+      amount: 400,
+      lendingRate: 0.5
+    }).subscribe(
+      val => console.log('val', val)
+    )
   }
 
 
@@ -203,8 +220,8 @@ export class MainComponent implements OnInit {
 
   private createTempForm() {
     this.keys = this.fb.group({
-      key: [''],
-      secret: ['']
+      key: ['', Validators.required],
+      secret: ['', Validators.required]
     })
   }
 }

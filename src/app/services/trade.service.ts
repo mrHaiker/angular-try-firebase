@@ -4,7 +4,8 @@ import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { HttpClient } from '@angular/common/http';
-import { RequestOptions } from '@angular/http';
+import 'rxjs/add/operator/debounceTime';
+
 
 export class Order {
   open: number;
@@ -63,6 +64,8 @@ export class TradeService {
     private http: HttpClient,
   ) {
     this.connectToTicketsStream();
+
+    this.currencies$.debounceTime(10000).subscribe(() => console.warn('Was broken connection to WS Tickets stream'))
   }
 
   get BTC(): PriceResponse {
@@ -153,4 +156,26 @@ export class TradeService {
       secret: value.secret,
     })
   }
+
+  marginBuy(value: RequestParams, params: MarginOffer): Observable<any> {
+    return this.http.post(`${environment.server}/marginBuy`, {
+      key: value.key,
+      secret: value.secret,
+      currencyA: params.currencyA,
+      currencyB: params.currencyB,
+      rate: params.rate,
+      amount: params.amount,
+      lendingRate: params.lendingRate,
+    })
+  }
+
+
+}
+
+export class MarginOffer {
+  currencyA: string;
+  currencyB: string;
+  rate: number;
+  amount: number;
+  lendingRate: number;
 }

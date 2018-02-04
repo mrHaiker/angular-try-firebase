@@ -145,7 +145,7 @@ router.post('/marginBuy', function (req, res) {
 
   let poloniex = new Poloniex(params.key, params.secret);
   poloniex.marginBuy(
-    params.currencyA, params.currencyB, params.rate, params.amout, params.lendingRate,
+    params.currencyA, params.currencyB, params.rate, params.amount, params.lendingRate,
     (err, data) => {
       if (err){
         res.send(err);
