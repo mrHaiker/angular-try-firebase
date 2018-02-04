@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { BrowserModule } from '@angular/platform-browser';
-import { MainModule } from './main/main.module';
+import { MainModule } from './pages/main/main.module';
 import { StorageService } from './services/storage.service';
 import { TradeService } from './services/trade.service';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './pages/auth/auth.module';
 import { AppRoutingModule } from './app-routing';
-import { AuthGuard } from './auth/auth.guard';
+import { AuthGuard } from './pages/auth/auth.guard';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UserService } from './services/user.service';
-import { LoaderModule } from './loader/loader.module';
+import { LoaderModule } from './components/loader/loader.module';
 import { HttpClientModule } from '@angular/common/http';
 import 'hammerjs';
 

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
-import { LoaderService } from '../loader/loader.service';
-import { TradeService } from '../services/trade.service';
+import { LoaderService } from '../../components/loader/loader.service';
+import { TradeService } from '../../services/trade.service';
 
 @Component({
   selector: 'app-auth',

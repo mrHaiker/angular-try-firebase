@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MainService } from './main.service';
 import { Observable } from 'rxjs/Observable';
-import { Order, OrderStatus, OrderTrend, TradeService } from '../services/trade.service';
-import { LocalStorage, StorageService } from '../services/storage.service';
+import { Order, OrderStatus, OrderTrend, TradeService } from '../../services/trade.service';
+import { LocalStorage, StorageService } from '../../services/storage.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import 'rxjs/add/observable/timer';
 
@@ -46,10 +46,7 @@ export class MainComponent implements OnInit {
     return this.currencyProfit + this.historyProfit
   }
   get step(): number {
-    return Number(((this.availableMoney / this.BTCPrice) / this.price / this.config.hardOut).toFixed(2));
-  }
-  get BTCPrice(): number {
-    return Number(this.main.BTC.last);
+    return Number((this.availableMoney / this.price / this.config.hardOut).toFixed(2));
   }
   get history(): Order[] {
     if (this.list.length > 20) {
@@ -71,13 +68,40 @@ export class MainComponent implements OnInit {
 
     this.main.getUserData().subscribe(
       users => {
-        this.keys.patchValue(users[0])
+        this.keys.patchValue(users[0]);
+        this.getAvailableMoney();
       }
     )
   }
 
+  getAvailableMoney() {
+    this.trade.getTradableBalances(this.keys.value).subscribe(
+      val => console.log('value', val)
+    )
+  }
+
   getBalance(): void {
-    this.main.getBalance(this.keys.value).subscribe(value => console.log('balance value', value));
+    this.trade.getBalance(this.keys.value).subscribe(value => console.log('balance value', value));
+  }
+
+  getCompleteBalances(): void {
+    this.trade.getCompleteBalances(this.keys.value).subscribe(value => console.log('balance value', value));
+  }
+
+  getOpenOrders(): void {
+    this.trade.getOpenOrders(this.keys.value).subscribe(value => console.log('balance value', value));
+  }
+
+  getAvailableAccountBalances(): void {
+    this.trade.getAvailableAccountBalances(this.keys.value).subscribe(value => console.log('balance value', value));
+  }
+
+  getTradableBalances(): void {
+    this.trade.getTradableBalances(this.keys.value).subscribe(value => console.log('balance value', value));
+  }
+
+  getMarginAccountSummary(): void {
+    this.trade.getMarginAccountSummary(this.keys.value).subscribe(value => console.log('balance value', value));
   }
 
 
@@ -144,7 +168,7 @@ export class MainComponent implements OnInit {
 
 
   private priceListener(): void {
-    this.main.currencies$.subscribe(
+    this.trade.currencies$.subscribe(
       val => {
         const currency = val['BTC_STR'];
         this.price = currency.last;

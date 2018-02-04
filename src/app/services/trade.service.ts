@@ -1,10 +1,28 @@
 import { Injectable } from '@angular/core';
 import { LocalStorage, StorageService } from './storage.service';
-import { Subject } from 'rxjs/Subject';
 import { environment } from '../../environments/environment';
-import {Observable} from "rxjs/Observable";
-import {HttpClient} from "@angular/common/http";
-import { PriceResponse } from '../main/main.service';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import { HttpClient } from '@angular/common/http';
+import { RequestOptions } from '@angular/http';
+
+export class Order {
+  open: number;
+  close: number;
+  profit: number;
+  count: number;
+  status: OrderStatus;
+  trend: OrderTrend;
+  constructor(data) {
+    this.open = data.open;
+    this.close = data.close;
+    this.profit = data.profit;
+    this.count = data.count;
+    this.status = data.status;
+    this.trend = data.trend;
+  }
+}
+
 
 export enum OrderStatus {
   CLOSE = 0,
@@ -17,14 +35,39 @@ export enum OrderTrend {
   WAIT = 0
 }
 
+export class PriceResponse {
+  aseVolume: string;
+  high24hr: string;
+  highestBid: string;
+  id: number;
+  isFrozen: string;
+  last: string;
+  low24hr: string;
+  lowestAsk: string;
+  percentChange: string;
+  quoteVolume: string;
+}
+
+export class RequestParams {
+  key: string;
+  secret: string;
+}
 
 @Injectable()
 export class TradeService {
+  public currencies$ = new Subject<PriceResponse>();
 
+  private _BTC: PriceResponse;
   constructor(
-    private storage: StorageService
-  ) {}
+    private storage: StorageService,
+    private http: HttpClient,
+  ) {
+    this.connectToTicketsStream();
+  }
 
+  get BTC(): PriceResponse {
+    return this._BTC;
+  }
   get position(): Order {
     return this.storage.get(LocalStorage.POSITION);
   }
@@ -52,21 +95,71 @@ export class TradeService {
 
     return order;
   }
-}
 
-export class Order {
-  open: number;
-  close: number;
-  profit: number;
-  count: number;
-  status: OrderStatus;
-  trend: OrderTrend;
-  constructor(data) {
-    this.open = data.open;
-    this.close = data.close;
-    this.profit = data.profit;
-    this.count = data.count;
-    this.status = data.status;
-    this.trend = data.trend;
+
+  // Api methods
+
+  connectToTicketsStream(): void {
+    console.log('try to connectToTicketsStream', environment.server);
+
+    const ws = new WebSocket(`ws:${environment.server}/tickets`);
+    ws.onmessage = (ev) => {
+      const response = JSON.parse(ev.data).res;
+      this._BTC = response['USDT_BTC'];
+      this.currencies$.next(response);
+    }
+  }
+
+  getBalance(value: RequestParams): Observable<any> {
+    return this.http.post(`${environment.server}/getBalance`, {
+      key: value.key,
+      secret: value.secret,
+    })
+  }
+
+  getCompleteBalances(value: RequestParams): Observable<any> {
+    return this.http.post(`${environment.server}/getCompleteBalances`, {
+      key: value.key,
+      secret: value.secret,
+    })
+  }
+
+  getOpenOrders(value: RequestParams): Observable<any> {
+    return this.http.post(`${environment.server}/getOpenOrders`, {
+      key: value.key,
+      secret: value.secret,
+    })
+  }
+
+  getAvailableAccountBalances(value: RequestParams): Observable<any> {
+    return this.http.post(`${environment.server}/getAvailableAccountBalances`, {
+      key: value.key,
+      secret: value.secret,
+    })
+  }
+
+  getTradableBalances(value: RequestParams): Observable<any> {
+    // const options = this._getRequestOptionArgs();
+
+    return this.http.post(`${environment.server}/getTradableBalances`, {
+      key: value.key,
+      secret: value.secret,
+    })
+  }
+
+  getMarginAccountSummary(value: RequestParams): Observable<any> {
+    return this.http.post(`${environment.server}/getMarginAccountSummary`, {
+      key: value.key,
+      secret: value.secret,
+    })
+  }
+
+  private _getRequestOptionArgs(options?) {
+    if (options == null) options = new RequestOptions();
+    if (options.headers == null) options.headers = new Headers();
+
+    options.headers.append('Access-Control-Allow-Origin', 'https://trading-api-93787.herokuapp.com/');
+
+    return options;
   }
 }

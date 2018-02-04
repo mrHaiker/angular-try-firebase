@@ -1,7 +1,7 @@
 <div class="coin-header">
   <div class="container">
     <div class="coin__header">
-      <p class="coin__ticket m-0" (click)="openPopup()">{{ coin }}/USD</p>
+      <p class="coin__ticket m-0" (click)="openPopup()">BTC</p>
       <p class="coin__balance m-0">{{ availableMoney + profit | currency }} </p>
       <p class="coin__profit m-0">{{ profit | currency }}</p>
       <div class="coin__input">
@@ -29,6 +29,17 @@
   </form>
 
   <button mat-raised-button color="basic" (click)="getBalance()">Get Balance</button>
+
+  <button mat-raised-button color="basic" (click)="getCompleteBalances()">getCompleteBalances</button>
+
+  <button mat-raised-button color="basic" (click)="getOpenOrders()">getOpenOrders</button>
+
+  <button mat-raised-button color="basic" (click)="getAvailableAccountBalances()">getAvailableAccountBalances</button>
+
+  <br><br>
+  <button mat-raised-button color="basic" (click)="getTradableBalances()">getTradableBalances</button>
+
+  <button mat-raised-button color="basic" (click)="getMarginAccountSummary()">getMarginAccountSummary</button>
 
   <hr>
   <p>Currency price: <b> {{ price | number:'1.2-8' }}</b></p>
