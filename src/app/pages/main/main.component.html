@@ -1,9 +1,9 @@
 <div class="coin-header">
   <div class="container">
     <div class="coin__header">
-      <p class="coin__ticket m-0" (click)="openPopup()">BTC</p>
-      <p class="coin__balance m-0">{{ availableMoney }}|{{ availableMoney + profit | number:'1.0-5' }} </p>
-      <p class="coin__profit m-0">{{ profit | number:'1.0-5' }} BTC  ({{ (profit * BTCPrice) | currency }})</p>
+      <p class="coin__ticket m-0" (click)="openPopup()">Settings</p>
+      <p class="coin__balance m-0">BTC  {{ availableMoney | number:'1.0-5' }} </p>
+      <p class="coin__profit m-0">{{ historyProfit | number:'1.0-5' }} BTC  ({{ (historyProfit * BTCPrice) | currency }})</p>
     </div>
   </div>
 </div>
@@ -36,6 +36,14 @@
   <button mat-raised-button color="basic" (click)="getMarginAccountSummary()">getMarginAccountSummary</button>
 
   <button mat-raised-button color="basic" (click)="buy()">BUY</button>
+
+  <button mat-raised-button color="basic" (click)="getPosa()">Get position</button>
+
+  <br><br>
+  <button mat-raised-button color="basic" (click)="closePosa()">Close position</button>
+
+
+  <button mat-raised-button color="warn" (click)="stop()">Stop</button>
 
   <hr>
   <p>Currency price: <b> {{ price | number:'1.2-8' }}</b></p>

@@ -157,8 +157,38 @@ export class TradeService {
     })
   }
 
+  getMarginPosition(value: RequestParams, params: CurrencyPair): Observable<any> {
+    return this.http.post(`${environment.server}/getMarginPosition`, {
+      key: value.key,
+      secret: value.secret,
+      currencyA: params.currencyA,
+      currencyB: params.currencyB,
+    })
+  }
+
+  closeMarginPosition(value: RequestParams, params: CurrencyPair): Observable<any> {
+    return this.http.post(`${environment.server}/closeMarginPosition`, {
+      key: value.key,
+      secret: value.secret,
+      currencyA: params.currencyA,
+      currencyB: params.currencyB,
+    })
+  }
+
   marginBuy(value: RequestParams, params: MarginOffer): Observable<any> {
     return this.http.post(`${environment.server}/marginBuy`, {
+      key: value.key,
+      secret: value.secret,
+      currencyA: params.currencyA,
+      currencyB: params.currencyB,
+      rate: params.rate,
+      amount: params.amount,
+      lendingRate: params.lendingRate,
+    })
+  }
+
+  marginSell(value: RequestParams, params: MarginOffer): Observable<any> {
+    return this.http.post(`${environment.server}/marginSell`, {
       key: value.key,
       secret: value.secret,
       currencyA: params.currencyA,
@@ -172,10 +202,13 @@ export class TradeService {
 
 }
 
-export class MarginOffer {
+export class CurrencyPair {
   currencyA: string;
   currencyB: string;
-  rate: number;
+}
+
+export class MarginOffer extends CurrencyPair{
+  rate: number | string;
   amount: number;
   lendingRate: number;
 }

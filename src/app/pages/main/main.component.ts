@@ -5,7 +5,7 @@ import { Order, OrderStatus, OrderTrend, TradeService } from '../../services/tra
 import { LocalStorage, StorageService } from '../../services/storage.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import 'rxjs/add/observable/timer';
-import { setTimeout } from 'timers';
+import { Subscription } from 'rxjs/Subscription';
 
 
 @Component({
@@ -30,6 +30,7 @@ export class MainComponent implements OnInit {
     step: 0.2,
     hardOut: 10
   };
+  private listener: Subscription;
 
   constructor(
     private storage: StorageService,
@@ -44,7 +45,7 @@ export class MainComponent implements OnInit {
     return profit;
   }
   get profit(): number {
-    return this.currencyProfit + this.historyProfit || 0;
+    return this.currencyProfit + this.historyProfit;
   }
   get step(): number {
     return Number((this.availableMoney / this.price / this.config.hardOut).toFixed(2));
@@ -117,16 +118,38 @@ export class MainComponent implements OnInit {
 
   buy() {
     this.trade.marginBuy(this.keys.value, {
-      currencyA: 'STR',
-      currencyB: 'BTC',
-      rate: 0.00004555,
+      currencyA: 'BTC',
+      currencyB: 'STR',
+      rate: 0.00004614,
       amount: 400,
-      lendingRate: 0.5
+      lendingRate: 0.05
     }).subscribe(
       val => console.log('val', val)
     )
   }
 
+  getPosa() {
+    this.trade.getMarginPosition(this.keys.value, {
+      currencyA: 'BTC',
+      currencyB: 'STR',
+    }).subscribe(
+      val => console.log('val', val)
+    )
+  }
+
+  closePosa() {
+    this.trade.closeMarginPosition(this.keys.value, {
+      currencyA: 'BTC',
+      currencyB: 'STR',
+    }).subscribe(
+      val => console.log('close val', val)
+    )
+  }
+
+  stop() {
+    console.log('listener was stopped');
+    this.listener.unsubscribe();
+  }
 
   cycle(data?: number): void {
     if (!this.price && !this.availableMoney) return console.log('unavailable currently price');
@@ -191,7 +214,7 @@ export class MainComponent implements OnInit {
 
 
   private priceListener(): void {
-    this.trade.currencies$.subscribe(
+    this.listener = this.trade.currencies$.subscribe(
       val => {
         const currency = val['BTC_STR'];
         this.price = currency.last;
