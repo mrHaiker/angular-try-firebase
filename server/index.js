@@ -11,9 +11,9 @@ let expressWs  = require('express-ws')(app);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-let port = process.env.PORT || 4000;        // set our port
+let port = process.env.PORT || 3000;        // set our port
 
-let poloniex = new Poloniex('awdaw', '123123sadw');
+let poloniex = new Poloniex();
 //
 let ticketRequest;
 
@@ -21,7 +21,7 @@ let ticketRequest;
 // =============================================================================
 let router = express.Router();              // get an instance of the express Router
 
-// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
+// test route to make sure everything is working
 router.get('/', function(req, res) {
   res.json({ message: 'hooray! welcome to our api!' });
 });
@@ -31,14 +31,16 @@ router.get('/returnBalance', function (req, res) {
   res.send('it\'s work');
 });
 
-router.post('/returnTickets', function (req, res) {
+router.post('/getBalance', function (req, res) {
   let params = req.body;
-  poloniex.getTicker((err, data) => {
+
+  let poloniex = new Poloniex(params.key, params.secret);
+  poloniex.returnBalances((err, data) => {
     if (err){
       res.send(err);
     }
 
-    res.send(data[params.pair] || params);
+    res.send(data);
   });
 });
 

@@ -24,15 +24,32 @@ export class PriceResponse {
 export class MainService {
   public currencies$ = new Subject<PriceResponse>();
 
+  private _BTC: PriceResponse;
   constructor(
+    private http: HttpClient
   ) {
     this.connectToTicketsStream();
+  }
+
+  get BTC(): PriceResponse {
+    return this._BTC;
   }
 
   connectToTicketsStream(): void {
     console.log('try to connectToTicketsStream', environment.server);
 
     const ws = new WebSocket(`ws:${environment.server}/tickets`);
-    ws.onmessage = (ev) => this.currencies$.next(JSON.parse(ev.data).res);
+    ws.onmessage = (ev) => {
+      const response = JSON.parse(ev.data).res;
+      this._BTC = response['USDT_BTC'];
+      this.currencies$.next(response);
+    }
+  }
+
+  getBalance(): Observable<any> {
+    return this.http.post(`${'//localhost:3000/api'}/getBalance`, {
+      key: 'adawdwad',
+      secret: 'adwadaw12312d',
+    })
   }
 }

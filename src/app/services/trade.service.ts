@@ -35,6 +35,9 @@ export class TradeService {
 
   openPosition(price: number, trend: OrderTrend, count): Order {
     const order = new Order({open: price, trend, count, status: OrderStatus.OPEN});
+
+    console.log('order', order);
+
     this.storage.set(LocalStorage.POSITION, order);
     return order;
   }

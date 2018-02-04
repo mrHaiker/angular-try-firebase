@@ -3,15 +3,19 @@ import { CommonModule } from '@angular/common';
 import { MainComponent } from './main.component';
 import { MainService } from './main.service';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { MatButtonModule, MatInputModule } from '@angular/material';
 
 @NgModule({
   imports: [
     CommonModule,
     HttpClientModule,
     FormsModule,
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    MatInputModule,
+    MatButtonModule,
+    ReactiveFormsModule
   ],
   declarations: [MainComponent],
   exports: [MainComponent],

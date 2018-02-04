@@ -16,6 +16,22 @@
 
 <div class="container">
   <hr>
+
+  <form [formGroup]="keys">
+    <div class="row">
+      <mat-form-field class="example-full-width col-4">
+        <input matInput formControlName="key" placeholder="Api">
+      </mat-form-field>
+      <mat-form-field class="example-full-width col-8">
+        <input matInput formControlName="secret" placeholder="Secret">
+      </mat-form-field>
+    </div>
+  </form>
+
+  <button mat-raised-button color="basic" (click)="getBalance()">Get Balance</button>
+
+
+  <hr>
   <p>Currency price: <b> {{ price | number:'1.2-8' }}</b></p>
 
 
@@ -70,3 +86,4 @@
     </div>
   </div>
 </div>
+

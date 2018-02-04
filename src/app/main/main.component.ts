@@ -4,6 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/timer';
 import { Order, OrderStatus, OrderTrend, TradeService } from '../services/trade.service';
 import { LocalStorage, StorageService } from '../services/storage.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 
 
 @Component({
@@ -19,6 +21,7 @@ export class MainComponent implements OnInit {
   public order: Order;
   public availableMoney = 10000;
   public settings: boolean;
+  public keys: FormGroup;
 
   private checkedPosition: boolean;
   private config = this.storage.get(LocalStorage.SETTINGS) || {
@@ -31,7 +34,9 @@ export class MainComponent implements OnInit {
   constructor(
     private storage: StorageService,
     private main: MainService,
-    private trade: TradeService
+    private trade: TradeService,
+    private fb: FormBuilder,
+    private db: AngularFireDatabase
   ) { }
 
   get historyProfit() {
@@ -43,7 +48,10 @@ export class MainComponent implements OnInit {
     return this.currencyProfit + this.historyProfit
   }
   get step(): number {
-    return Number((this.availableMoney / this.price / this.config.hardOut).toFixed(2));
+    return Number(((this.availableMoney / this.BTCPrice) / this.price / this.config.hardOut).toFixed(2));
+  }
+  get BTCPrice(): number {
+    return Number(this.main.BTC.last);
   }
   get history(): Order[] {
     if (this.list.length > 20) {
@@ -60,8 +68,25 @@ export class MainComponent implements OnInit {
 
     this.priceListener();
     Observable.timer(1, 1000).subscribe((val) => this.cycle(val));
+
+    this.createTempForm();
+
+    this.keys.valueChanges.subscribe(
+      val => console.log('val', val)
+    );
+
+    this.getData().snapshotChanges().subscribe(
+      item => console.log('items', item)
+    )
   }
 
+  getData(): AngularFireList<any> {
+    return this.db.list('users');
+  }
+
+  getBalance(): void {
+    this.main.getBalance().subscribe(value => console.log('balance value', value));
+  }
 
 
   cycle(data?: number): void {
@@ -143,5 +168,12 @@ export class MainComponent implements OnInit {
     !this.trade.position ? this.openPosition(OrderTrend.LONG) : this.list.unshift(this.order = this.trade.position);
 
     this.checkedPosition = true;
+  }
+
+  private createTempForm() {
+    this.keys = this.fb.group({
+      key: [''],
+      secret: ['']
+    })
   }
 }
