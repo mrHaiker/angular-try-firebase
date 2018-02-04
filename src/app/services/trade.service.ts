@@ -140,7 +140,7 @@ export class TradeService {
 
   // Api methods
   connectToTicketsStream(): void {
-    console.log('try to connectToTicketsStream');
+    console.log('try to connectToTicketsStream', environment.server);
 
     const ws = new WebSocket(`ws:${environment.server}/tickets`);
     ws.onmessage = (ev) => {
