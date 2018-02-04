@@ -6,7 +6,7 @@
     "postinstall": "ng build --aot -prod",
     "start": "node ./server/index.js",
     "serve": "ng serve",
-    "build": "ng build --aot -prod --progress -op server/dist",
+    "build": "ng build --aot -prod --progress",
     "deploy:heroku": "ng build && git push heroku master",
     "deploy:fb": "firebase deploy"
   },
