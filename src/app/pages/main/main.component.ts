@@ -66,8 +66,6 @@ export class MainComponent implements OnInit {
     this.storage.set(LocalStorage.COIN, this.coin);
 
     this.priceListener();
-    Observable.timer(1, 1000).subscribe((val) => this.cycle(val));
-
     this.createTempForm();
 
     this.main.getUserData().subscribe(
@@ -77,7 +75,9 @@ export class MainComponent implements OnInit {
       }
     );
 
-    this.checkPosition();
+    this.checkPosition().then(() => {
+      Observable.timer(1, 1000).subscribe((val) => this.cycle(val));
+    })
   }
 
   getAvailableMoney() {
@@ -182,17 +182,23 @@ export class MainComponent implements OnInit {
     );
   }
 
-  private checkPosition(force?: boolean) {
-    if (this.checkedPosition && !force) return;
+  private checkPosition(force?: boolean): Promise<boolean> {
+    return new Promise(resolve => {
+      if (this.checkedPosition && !force) return;
 
-    if (!this.step) {
-      return setTimeout(() => this.checkPosition(), 1000);
-    }
+      if (!this.step) {
+        return setTimeout(() => {
+          this.checkPosition().then(() => {
+            Observable.timer(1, 1000).subscribe((val) => this.cycle(val));
+          })
+        }, 1000);
+      }
 
-    this.list = this.trade.history;
-    !this.trade.position ? this.openPosition(OrderTrend.LONG) : this.list.unshift(this.order = this.trade.position);
+      this.list = this.trade.history;
+      !this.trade.position ? this.openPosition(OrderTrend.LONG) : this.list.unshift(this.order = this.trade.position);
 
-    this.checkedPosition = true;
+      resolve(this.checkedPosition = true)
+    })
   }
 
   private createTempForm() {
