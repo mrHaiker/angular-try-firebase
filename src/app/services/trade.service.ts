@@ -5,6 +5,8 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/do';
+
 
 
 export class Order {
@@ -78,30 +80,65 @@ export class TradeService {
     return this.storage.get(LocalStorage.HISTORY) || [];
   }
 
-
-  openPosition(price: number, trend: OrderTrend, count): Order {
+  waitPosition(price: number, trend: OrderTrend, count) {
     const order = new Order({open: price, trend, count, status: OrderStatus.OPEN});
 
-    console.log('order', order);
 
     this.storage.set(LocalStorage.POSITION, order);
     return order;
   }
 
-  closePosition(price: number, order: Order): Order {
-    order.close = price;
-    order.status = OrderStatus.CLOSE;
 
-    const history = this.history;
-    history.unshift(order);
-    this.storage.set(LocalStorage.HISTORY, history);
+  openPosition(keys: RequestParams, price: number, trend: OrderTrend, count): Observable<any> {
+    const rate = price / 100 * 3;
+    const trendFuncName = trend === OrderTrend.SHORT ? 'marginSell' : 'marginBuy';
 
-    return order;
+    return Observable.create(observer => {
+      setTimeout(() => observer.next(true), 600)
+    }).map(val => {
+      // const result = this.getAverageRate(val.resultingTrades);
+      // const order = new Order({
+      //   open: result.rate,
+      //   trend,
+      //   count: result.amount,
+      //   status: OrderStatus.OPEN
+      // });
+      const order = new Order({
+        open: price,
+        trend,
+        count,
+        status: OrderStatus.OPEN
+      });
+
+      console.log('order', order);
+
+      this.storage.set(LocalStorage.POSITION, order);
+      return {
+        response: val,
+        order: order
+      }
+    });
+  }
+
+  closePosition(keys: RequestParams, price: number, order: Order): Observable<any> {
+    return Observable.create(observer => {
+      setTimeout(() => observer.next(true), 600)
+    }).do(val => {
+      order.close = price;
+      order.status = OrderStatus.CLOSE;
+
+      console.log('Position was closed', val);
+
+      const history = this.history;
+      history.unshift(order);
+      this.storage.set(LocalStorage.HISTORY, history);
+
+      console.log('order after close position', order);
+    });
   }
 
 
   // Api methods
-
   connectToTicketsStream(): void {
     console.log('try to connectToTicketsStream', environment.server);
 
@@ -200,6 +237,17 @@ export class TradeService {
   }
 
 
+  getAverageRate(res: any[]): {amount: number, rate: number} {
+    let amount, rate;
+
+    amount = res.map(val => Number(val.amount)).reduce((a, b) => a + b, 0);
+    rate = res.map(val => Number(val.rate)).reduce((a, b) => a + b, 0);
+
+    return {
+      amount,
+      rate: amount / rate
+    }
+  }
 }
 
 export class CurrencyPair {

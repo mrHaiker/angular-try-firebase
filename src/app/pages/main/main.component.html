@@ -46,7 +46,7 @@
   <button mat-raised-button color="warn" (click)="stop()">Stop</button>
 
   <hr>
-  <p>Currency price: <b> {{ price | number:'1.2-8' }}</b></p>
+  <p>Currency price: <b> {{ price | number:'1.8-8' }}</b></p>
 
 
   <hr>
@@ -65,7 +65,7 @@
     <tr class="coin__row" *ngFor="let item of history; let i = index"
         [ngClass]="{'green': item.profit > 0, 'red': item.profit < 0}">
       <th scope="row">{{ i + 1}}</th>
-      <td>{{ item.open | number:'1.0-8'}}</td>
+      <td>{{ item.open | number:'1.8-8'}}</td>
       <td>{{ item.count | number:'1.0-2' }}</td>
       <td>{{ item.close | number:'1.0-8'}}</td>
       <td>

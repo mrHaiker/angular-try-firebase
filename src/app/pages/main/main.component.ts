@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MainService } from './main.service';
 import { Observable } from 'rxjs/Observable';
-import { Order, OrderStatus, OrderTrend, TradeService } from '../../services/trade.service';
+import { Order, OrderStatus, OrderTrend, PriceResponse, TradeService } from '../../services/trade.service';
 import { LocalStorage, StorageService } from '../../services/storage.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import 'rxjs/add/observable/timer';
 import { Subscription } from 'rxjs/Subscription';
+import { isUndefined } from 'util';
 
 
 @Component({
@@ -25,8 +26,8 @@ export class MainComponent implements OnInit {
 
   private checkedPosition: boolean;
   private config = this.storage.get(LocalStorage.SETTINGS) || {
-    loss: 0.5,
-    profit: 1,
+    loss: 1,
+    profit: 5,
     step: 0.2,
     hardOut: 10
   };
@@ -87,9 +88,9 @@ export class MainComponent implements OnInit {
   }
 
   getAvailableMoney() {
-    this.trade.getTradableBalances(this.keys.value).subscribe(
-      val => this.availableMoney =  Number(val['BTC_STR']['BTC'])
-    )
+    this.trade.getMarginAccountSummary(this.keys.value).subscribe(
+      val => this.availableMoney =  Number(val.totalValue) * 2.5
+    );
   }
 
   getBalance(): void {
@@ -152,7 +153,9 @@ export class MainComponent implements OnInit {
   }
 
   cycle(data?: number): void {
-    if (!this.price && !this.availableMoney) return console.log('unavailable currently price');
+    if (isUndefined(this.price) || isUndefined(this.availableMoney) || isUndefined(this.order)) {
+      return console.log('unavailable currently price');
+    }
 
     this.currencyProfit = this.getCurrProfitInPer();
 
@@ -174,45 +177,34 @@ export class MainComponent implements OnInit {
     if (this.order.count === this.config.hardOut) return this.closePosition();
 
     const trend = this.order.trend === OrderTrend.SHORT ? OrderTrend.LONG : OrderTrend.SHORT;
-    const position = this.order.count + this.step;
+    const count = this.order.count + this.step;
 
-    this.trade.closePosition(this.price, this.order);
-    this.openPosition(trend, position);
+    this.trade.closePosition(this.keys.value, this.price, this.order).subscribe(
+      val => {
+        this.openPosition(trend, count);
+      }
+    );
   }
 
+  // Open Short of Long Position
   openPosition(trend: OrderTrend, count = this.step): void {
-    const rate = this.price / 100 * 3;
-    this.trade.marginBuy(this.keys.value, {
-      currencyA: 'BTC',
-      currencyB: 'STR',
-      rate: trend === OrderTrend.SHORT ? Number(this.price) - rate : Number(this.price) + rate,
-      amount: count,
-      lendingRate: 0.05
-    }).subscribe(
+    this.trade.openPosition(this.keys.value, this.price, trend, count).subscribe(
+      val => this.checkPosition(true)
+    );
+  }
+
+  // Close by SUCCESS
+  closePosition(): void {
+    this.trade.closePosition(this.keys.value, this.price, this.order).subscribe(
       val => {
-        console.log('Position was closed', val);
-        this.trade.openPosition(this.price, trend, count);
+        this.order = this.trade.waitPosition(this.price, OrderTrend.WAIT, 0);
         this.checkPosition(true);
       }
     );
   }
 
-  closePosition(): void {
-    this.trade.closeMarginPosition(this.keys.value, {
-      currencyA: 'BTC',
-      currencyB: 'STR',
-    }).subscribe(
-      val => {
-        console.log('Position was closed', val);
-        this.trade.closePosition(this.price, this.order);
-
-        this.order = this.trade.openPosition(this.price, OrderTrend.WAIT, 0);
-        this.checkPosition(true);
-      }
-    )
-  }
-
   getCurrProfitInPer(): number {
+    if (isUndefined(this.order)) return;
     return this.updateCurrencyProfit(this.order).profit / (this.order.open * this.order.count);
   }
 
@@ -237,8 +229,10 @@ export class MainComponent implements OnInit {
   private priceListener(): void {
     this.listener = this.trade.currencies$.subscribe(
       val => {
-        const currency = val['BTC_STR'];
-        this.price = currency.last;
+        const currency: PriceResponse = val['BTC_STR'];
+        this.price = this.order ?
+          this.order.trend === OrderTrend.LONG ? Number(currency.highestBid) : Number(currency.lowestAsk) :
+          Number(currency.last);
       }
     );
   }

@@ -26,6 +26,7 @@
     }
   }
   &__row {
+    transition: all .25s ease;
     &.red {
       background: rgba(255, 129, 130, 0.25);
     }
