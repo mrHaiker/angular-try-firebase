@@ -31,6 +31,9 @@ router.get('/returnBalance', function (req, res) {
   res.send('it\'s work');
 });
 
+/*******************************************************/
+/*                     Get Balance                     */
+/*******************************************************/
 router.post('/getBalance', function (req, res) {
   let params = req.body;
 
@@ -43,6 +46,171 @@ router.post('/getBalance', function (req, res) {
     res.send(data);
   });
 });
+
+
+/*******************************************************/
+/*                Get Complete Balance                 */
+/*******************************************************/
+router.post('/getCompleteBalances', function (req, res) {
+  let params = req.body;
+
+  let poloniex = new Poloniex(params.key, params.secret);
+  poloniex.returnCompleteBalances((err, data) => {
+    if (err){
+      res.send(err);
+    }
+
+    res.send(data);
+  });
+});
+
+/*******************************************************/
+/*                   Get Open Orders                   */
+/*******************************************************/
+router.post('/getOpenOrders', function (req, res) {
+  let params = req.body;
+
+  let poloniex = new Poloniex(params.key, params.secret);
+  poloniex.returnOpenOrders('all', (err, data) => {
+    if (err){
+      res.send(err);
+    }
+
+    res.send(data);
+  });
+});
+
+
+/*******************************************************/
+/*            Get Available Account Balances           */
+/*******************************************************/
+router.post('/getAvailableAccountBalances', function (req, res) {
+  let params = req.body;
+
+  let poloniex = new Poloniex(params.key, params.secret);
+  poloniex.returnAvailableAccountBalances((err, data) => {
+    if (err){
+      res.send(err);
+    }
+
+    res.send(data);
+  });
+});
+
+
+/*******************************************************/
+/*               Return Tradable Balances              */
+/*******************************************************/
+router.post('/getTradableBalances', function (req, res) {
+  let params = req.body;
+
+  let poloniex = new Poloniex(params.key, params.secret);
+  poloniex.returnTradableBalances((err, data) => {
+    if (err){
+      res.send(err);
+    }
+
+    res.send(data);
+  });
+});
+
+
+/*******************************************************/
+/*              Get Margin Account Summary             */
+/*******************************************************/
+router.post('/getMarginAccountSummary', function (req, res) {
+  let params = req.body;
+
+  let poloniex = new Poloniex(params.key, params.secret);
+  poloniex.returnMarginAccountSummary((err, data) => {
+    if (err){
+      res.send(err);
+    }
+
+    res.send(data);
+  });
+});
+
+
+/*******************************************************/
+/*                      Margin Buy                     */
+/*******************************************************/
+router.post('/marginBuy', function (req, res) {
+  let params = req.body;
+
+  let poloniex = new Poloniex(params.key, params.secret);
+  poloniex.marginBuy(
+    params.currencyA, params.currencyB, params.rate, params.amout, params.lendingRate,
+    (err, data) => {
+      if (err){
+        res.send(err);
+      }
+
+      res.send(data);
+    });
+});
+
+
+/*******************************************************/
+/*                      Margin Sell                    */
+/*******************************************************/
+router.post('/marginSell', function (req, res) {
+  let params = req.body;
+
+  let poloniex = new Poloniex(params.key, params.secret);
+  poloniex.marginSell(
+    params.currencyA, params.currencyB, params.rate, params.amount, params.lendingRate,
+    (err, data) => {
+      if (err){
+        res.send(err);
+      }
+
+      res.send(data);
+    });
+});
+
+
+/*******************************************************/
+/*                  Get Margin Position                */
+/*******************************************************/
+router.post('/getMarginPosition', function (req, res) {
+  let params = req.body;
+
+  let poloniex = new Poloniex(params.key, params.secret);
+  poloniex.getMarginPosition(params.currencyA, params.currencyB, (err, data) => {
+    if (err){
+      res.send(err);
+    }
+
+    res.send(data);
+  });
+});
+
+
+/*******************************************************/
+/*                 Close Margin Position               */
+/*******************************************************/
+router.post('/closeMarginPosition', function (req, res) {
+  let params = req.body;
+
+  let poloniex = new Poloniex(params.key, params.secret);
+  poloniex.closeMarginPosition(params.currencyA, params.currencyB, (err, data) => {
+    if (err){
+      res.send(err);
+    }
+
+    res.send(data);
+  });
+});
+
+
+
+
+
+
+
+
+
 
 router.ws('/tickets', function(ws, req) {
   setInterval(

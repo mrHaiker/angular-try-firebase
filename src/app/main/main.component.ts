@@ -71,7 +71,6 @@ export class MainComponent implements OnInit {
 
     this.main.getUserData().subscribe(
       users => {
-        console.log('users', users[0]);
         this.keys.patchValue(users[0])
       }
     )

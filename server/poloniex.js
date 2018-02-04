@@ -218,9 +218,7 @@ module.exports = (function () {
         currencyPair = currencyA;
         callback = currencyB;
         currencyB = null;
-      }
-
-      else {
+      } else {
         currencyPair = joinCurrencies(currencyA, currencyB);
       }
 
