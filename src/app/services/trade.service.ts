@@ -153,13 +153,4 @@ export class TradeService {
       secret: value.secret,
     })
   }
-
-  private _getRequestOptionArgs(options?) {
-    if (options == null) options = new RequestOptions();
-    if (options.headers == null) options.headers = new Headers();
-
-    options.headers.append('Access-Control-Allow-Origin', 'https://trading-api-93787.herokuapp.com/');
-
-    return options;
-  }
 }

@@ -5,6 +5,7 @@ import { Order, OrderStatus, OrderTrend, TradeService } from '../../services/tra
 import { LocalStorage, StorageService } from '../../services/storage.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import 'rxjs/add/observable/timer';
+import { setTimeout } from 'timers';
 
 
 @Component({
@@ -18,7 +19,7 @@ export class MainComponent implements OnInit {
   public coin = this.storage.get(LocalStorage.COIN) || 'BTC';
   public list: Order[] = this.trade.history;
   public order: Order;
-  public availableMoney = 10000;
+  public availableMoney: number;
   public settings: boolean;
   public keys: FormGroup;
 
@@ -43,10 +44,13 @@ export class MainComponent implements OnInit {
     return profit;
   }
   get profit(): number {
-    return this.currencyProfit + this.historyProfit
+    return this.currencyProfit + this.historyProfit || 0;
   }
   get step(): number {
     return Number((this.availableMoney / this.price / this.config.hardOut).toFixed(2));
+  }
+  get BTCPrice(): number {
+    return Number(this.trade.BTC ? this.trade.BTC.last : 0);
   }
   get history(): Order[] {
     if (this.list.length > 20) {
@@ -71,12 +75,14 @@ export class MainComponent implements OnInit {
         this.keys.patchValue(users[0]);
         this.getAvailableMoney();
       }
-    )
+    );
+
+    this.checkPosition();
   }
 
   getAvailableMoney() {
     this.trade.getTradableBalances(this.keys.value).subscribe(
-      val => console.log('value', val)
+      val => this.availableMoney =  Number(val['BTC_STR']['BTC'])
     )
   }
 
@@ -106,7 +112,7 @@ export class MainComponent implements OnInit {
 
 
   cycle(data?: number): void {
-    if (!this.price) return console.log('unavailable currently price');
+    if (!this.price && !this.availableMoney) return console.log('unavailable currently price');
 
     this.currencyProfit = this.getCurrProfitInPer();
 
@@ -172,13 +178,16 @@ export class MainComponent implements OnInit {
       val => {
         const currency = val['BTC_STR'];
         this.price = currency.last;
-        this.checkPosition();
       }
     );
   }
 
-  private checkPosition(force?: boolean): void {
+  private checkPosition(force?: boolean) {
     if (this.checkedPosition && !force) return;
+
+    if (!this.step) {
+      return setTimeout(() => this.checkPosition(), 1000);
+    }
 
     this.list = this.trade.history;
     !this.trade.position ? this.openPosition(OrderTrend.LONG) : this.list.unshift(this.order = this.trade.position);
