@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireDatabase } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -11,9 +10,7 @@ export class AppComponent implements OnInit{
   title = 'app';
   items: Observable<any[]>;
 
-  constructor(
-    protected db: AngularFireDatabase
-  ) {}
+  constructor() {}
 
   ngOnInit() {
     // this.items = this.db.collection('items').valueChanges();

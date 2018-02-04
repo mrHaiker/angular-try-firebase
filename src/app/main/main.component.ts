@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MainService } from './main.service';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/timer';
 import { Order, OrderStatus, OrderTrend, TradeService } from '../services/trade.service';
 import { LocalStorage, StorageService } from '../services/storage.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
+import 'rxjs/add/observable/timer';
 
 
 @Component({
@@ -36,7 +35,6 @@ export class MainComponent implements OnInit {
     private main: MainService,
     private trade: TradeService,
     private fb: FormBuilder,
-    private db: AngularFireDatabase
   ) { }
 
   get historyProfit() {
@@ -71,21 +69,16 @@ export class MainComponent implements OnInit {
 
     this.createTempForm();
 
-    this.keys.valueChanges.subscribe(
-      val => console.log('val', val)
-    );
-
-    this.getData().snapshotChanges().subscribe(
-      item => console.log('items', item)
+    this.main.getUserData().subscribe(
+      users => {
+        console.log('users', users[0]);
+        this.keys.patchValue(users[0])
+      }
     )
   }
 
-  getData(): AngularFireList<any> {
-    return this.db.list('users');
-  }
-
   getBalance(): void {
-    this.main.getBalance().subscribe(value => console.log('balance value', value));
+    this.main.getBalance(this.keys.value).subscribe(value => console.log('balance value', value));
   }
 
 

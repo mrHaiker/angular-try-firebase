@@ -32,8 +32,7 @@ const config = {
   imports: [
     BrowserModule,
     MainModule,
-    AngularFireModule.initializeApp(config),
-    AngularFireDatabaseModule,
+    AngularFireModule.initializeApp(config, 'trade-api'),
     AuthModule,
     LoaderModule,
     HttpClientModule,

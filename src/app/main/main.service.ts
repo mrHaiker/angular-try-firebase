@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { AngularFireDatabase } from 'angularfire2/database';
-import { AuthService } from '../auth/auth.service';
 import { Subject } from 'rxjs/Subject';
 import { environment } from '../../environments/environment';
+import { AngularFirestore } from 'angularfire2/firestore';
 
 export class PriceResponse {
   aseVolume: string;
@@ -19,6 +18,11 @@ export class PriceResponse {
   quoteVolume: string;
 }
 
+export class UserFireData {
+  key: string;
+  secret: string;
+}
+
 
 @Injectable()
 export class MainService {
@@ -26,13 +30,18 @@ export class MainService {
 
   private _BTC: PriceResponse;
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private afs: AngularFirestore
   ) {
     this.connectToTicketsStream();
   }
 
   get BTC(): PriceResponse {
     return this._BTC;
+  }
+
+  getUserData(): Observable<UserFireData[]> {
+    return this.afs.collection('users').valueChanges() as Observable<UserFireData[]>;
   }
 
   connectToTicketsStream(): void {
@@ -46,10 +55,10 @@ export class MainService {
     }
   }
 
-  getBalance(): Observable<any> {
-    return this.http.post(`${'//localhost:3000/api'}/getBalance`, {
-      key: 'adawdwad',
-      secret: 'adwadaw12312d',
+  getBalance(value: {key: string, secret: string}): Observable<any> {
+    return this.http.post(`${environment.server}/getBalance`, {
+      key: value.key,
+      secret: value.secret,
     })
   }
 }
