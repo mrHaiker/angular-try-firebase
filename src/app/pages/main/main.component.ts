@@ -27,8 +27,8 @@ export class MainComponent implements OnInit {
 
   private checkedPosition: boolean;
   private config = this.storage.get(LocalStorage.SETTINGS) || {
-    loss: 0.5,
-    profit: 1,
+    loss: 2,
+    profit: 10,
     step: 0.2,
     hardOut: 10
   };
@@ -164,10 +164,10 @@ export class MainComponent implements OnInit {
     this.currencyProfit = this.getCurrProfitInPer();
 
     if (this.order.trend === OrderTrend.WAIT) {
-      if ((this.price - this.order.open) / this.price * 100 <= this.config.loss * -1)
+      if ((Number(this.currency.highestBid) - this.order.open) / this.price * 100 <= this.config.loss * -1)
         this.openPosition(OrderTrend.SHORT);
 
-      if ((this.price - this.order.open) / this.price * 100 >= this.config.loss)
+      if ((Number(this.currency.lowestAsk) - this.order.open) / this.price * 100 >= this.config.loss)
         this.openPosition(OrderTrend.LONG);
 
     } else {
@@ -192,7 +192,12 @@ export class MainComponent implements OnInit {
 
   // Open Short of Long Position
   openPosition(trend: OrderTrend, count = this.step): void {
-    this.trade.openPosition(this.keys.value, this.price, trend, count).subscribe(
+    let rate = this.price;
+    if (this.order.trend === OrderTrend.WAIT) {
+      rate = trend === OrderTrend.SHORT ? Number(this.currency.highestBid) : Number(this.currency.lowestAsk)
+    }
+
+    this.trade.openPosition(this.keys.value, rate, trend, count).subscribe(
       val => this.checkPosition(true)
     );
   }
