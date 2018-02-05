@@ -23,11 +23,12 @@ export class MainComponent implements OnInit {
   public availableMoney: number;
   public settings: boolean;
   public keys: FormGroup;
+  public currency: PriceResponse;
 
   private checkedPosition: boolean;
   private config = this.storage.get(LocalStorage.SETTINGS) || {
-    loss: 1,
-    profit: 5,
+    loss: 0.5,
+    profit: 1,
     step: 0.2,
     hardOut: 10
   };
@@ -157,6 +158,9 @@ export class MainComponent implements OnInit {
       return console.log('unavailable currently price');
     }
 
+    if (this.order.status !== OrderStatus.OPEN) return;
+
+
     this.currencyProfit = this.getCurrProfitInPer();
 
     if (this.order.trend === OrderTrend.WAIT) {
@@ -204,12 +208,11 @@ export class MainComponent implements OnInit {
   }
 
   getCurrProfitInPer(): number {
-    if (isUndefined(this.order)) return;
     return this.updateCurrencyProfit(this.order).profit / (this.order.open * this.order.count);
   }
 
   updateCurrencyProfit(order: Order): Order {
-    if (order.status !== OrderStatus.OPEN) return;
+    if (order.status !== OrderStatus.OPEN) return order;
 
     order.profit = (this.price - order.open) * order.count * order.trend;
     return order;
@@ -221,15 +224,11 @@ export class MainComponent implements OnInit {
     this.settings = open;
   }
 
-  currency(take: string, get: string): string {
-    return `${take}_${get}`;
-  }
-
 
   private priceListener(): void {
     this.listener = this.trade.currencies$.subscribe(
       val => {
-        const currency: PriceResponse = val['BTC_STR'];
+        const currency: PriceResponse = this.currency = val['BTC_STR'];
         this.price = this.order ?
           this.order.trend === OrderTrend.LONG ? Number(currency.highestBid) : Number(currency.lowestAsk) :
           Number(currency.last);

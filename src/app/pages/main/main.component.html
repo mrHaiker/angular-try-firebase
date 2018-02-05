@@ -46,7 +46,11 @@
   <button mat-raised-button color="warn" (click)="stop()">Stop</button>
 
   <hr>
-  <p>Currency price: <b> {{ price | number:'1.8-8' }}</b></p>
+  <p>
+    <span>Currency price: <b> {{ price | number:'1.8-8' }}</b></span>
+    <span>highestBid: <b> {{ currency?.highestBid | number:'1.8-8' }}</b></span>
+    <span>lowestAsk: <b> {{ currency?.lowestAsk | number:'1.8-8' }}</b></span>
+  </p>
 
 
   <hr>
