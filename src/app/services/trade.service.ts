@@ -63,15 +63,14 @@ export class TradeService {
   private _BTC: PriceResponse;
   constructor(
     private storage: StorageService,
-    private http: HttpClient,
-    private location: Location
+    private http: HttpClient
   ) {
     this.connectToTicketsStream();
 
     this.currencies$.debounceTime(10000).subscribe(() => {
       console.warn('Was broken connection to WS Tickets stream');
       setTimeout(() => {
-        this.location.reload();
+        location.reload();
       }, 3000);
     });
   }
