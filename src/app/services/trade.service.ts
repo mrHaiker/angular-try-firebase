@@ -64,10 +64,16 @@ export class TradeService {
   constructor(
     private storage: StorageService,
     private http: HttpClient,
+    private location: Location
   ) {
     this.connectToTicketsStream();
 
-    this.currencies$.debounceTime(10000).subscribe(() => console.warn('Was broken connection to WS Tickets stream'))
+    this.currencies$.debounceTime(10000).subscribe(() => {
+      console.warn('Was broken connection to WS Tickets stream');
+      setTimeout(() => {
+        this.location.reload();
+      }, 3000);
+    });
   }
 
   get BTC(): PriceResponse {
