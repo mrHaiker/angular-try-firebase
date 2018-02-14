@@ -178,6 +178,11 @@ export class MainComponent implements OnInit {
   }
 
   invertPosition(): void {
+    console.log('invertPosition', {
+      count: this.order.count,
+      hardOutByStep: this.config.hardOut * this.step,
+      step: this.step,
+    });
     if (this.order.count >= this.config.hardOut * this.step) return this.closePosition();
 
     const trend = this.order.trend === OrderTrend.SHORT ? OrderTrend.LONG : OrderTrend.SHORT;
