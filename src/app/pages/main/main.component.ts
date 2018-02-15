@@ -33,6 +33,7 @@ export class MainComponent implements OnInit {
     hardOut: 10
   };
   private listener: Subscription;
+  private positionStep: number;
 
   constructor(
     private storage: StorageService,
@@ -136,7 +137,7 @@ export class MainComponent implements OnInit {
       currencyB: 'STR',
     }).subscribe(
       val => console.log('val', val)
-    )
+    );
   }
 
   closePosa() {
@@ -145,7 +146,7 @@ export class MainComponent implements OnInit {
       currencyB: 'STR',
     }).subscribe(
       val => console.log('close val', val)
-    )
+    );
   }
 
   stop() {
@@ -182,11 +183,12 @@ export class MainComponent implements OnInit {
       count: this.order.count,
       hardOutByStep: this.config.hardOut * this.step,
       step: this.step,
+      positionStep: this.positionStep,
     });
-    if (this.order.count >= this.config.hardOut * this.step) return this.closePosition();
+    if (this.order.count >= this.config.hardOut * this.positionStep) return this.closePosition();
 
     const trend = this.order.trend === OrderTrend.SHORT ? OrderTrend.LONG : OrderTrend.SHORT;
-    const count = this.order.count + this.step;
+    const count = this.order.count + this.positionStep;
 
     this.trade.closePosition(this.keys.value, this.price, this.order).subscribe(
       val => {
@@ -197,6 +199,7 @@ export class MainComponent implements OnInit {
 
   // Open Short of Long Position
   openPosition(trend: OrderTrend, count = this.step): void {
+    this.positionStep = this.step;
     let rate = this.price;
     if (this.order.trend === OrderTrend.WAIT) {
       rate = trend === OrderTrend.SHORT ? Number(this.currency.highestBid) : Number(this.currency.lowestAsk);
@@ -254,21 +257,21 @@ export class MainComponent implements OnInit {
         return setTimeout(() => {
           this.checkPosition().then(() => {
             Observable.timer(1, 1000).subscribe((val) => this.cycle(val));
-          })
+          });
         }, 1000);
       }
 
       this.list = this.trade.history;
       !this.trade.position ? this.openPosition(OrderTrend.LONG) : this.list.unshift(this.order = this.trade.position);
 
-      resolve(this.checkedPosition = true)
-    })
+      resolve(this.checkedPosition = true);
+    });
   }
 
   private createTempForm() {
     this.keys = this.fb.group({
       key: ['', Validators.required],
       secret: ['', Validators.required]
-    })
+    });
   }
 }
