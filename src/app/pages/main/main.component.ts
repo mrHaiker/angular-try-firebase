@@ -33,7 +33,7 @@ export class MainComponent implements OnInit {
     hardOut: 10
   };
   private listener: Subscription;
-  private positionStep = this.step;
+  private positionStep: number;
 
   constructor(
     private storage: StorageService,
@@ -128,7 +128,7 @@ export class MainComponent implements OnInit {
       lendingRate: 0.05
     }).subscribe(
       val => console.log('val', val)
-    )
+    );
   }
 
   getPosa() {
@@ -185,10 +185,10 @@ export class MainComponent implements OnInit {
       step: this.step,
       positionStep: this.positionStep,
     });
-    if (this.order.count >= this.config.hardOut * this.positionStep) return this.closePosition();
+    if (this.order.count >= this.config.hardOut * (this.positionStep || this.step)) return this.closePosition();
 
     const trend = this.order.trend === OrderTrend.SHORT ? OrderTrend.LONG : OrderTrend.SHORT;
-    const count = this.order.count + this.positionStep;
+    const count = this.order.count + (this.positionStep || this.step);
 
     this.trade.closePosition(this.keys.value, this.price, this.order).subscribe(
       val => {
