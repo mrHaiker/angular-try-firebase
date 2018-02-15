@@ -33,7 +33,7 @@ export class MainComponent implements OnInit {
     hardOut: 10
   };
   private listener: Subscription;
-  private positionStep: number;
+  private positionStep = this.step;
 
   constructor(
     private storage: StorageService,
