@@ -194,7 +194,7 @@ export class MainComponent implements OnInit {
   openPosition(trend: OrderTrend, count = this.step): void {
     let rate = this.price;
     if (this.order.trend === OrderTrend.WAIT) {
-      rate = trend === OrderTrend.SHORT ? Number(this.currency.highestBid) : Number(this.currency.lowestAsk)
+      rate = trend === OrderTrend.SHORT ? Number(this.currency.highestBid) : Number(this.currency.lowestAsk);
     }
 
     this.trade.openPosition(this.keys.value, rate, trend, count).subscribe(
@@ -234,7 +234,7 @@ export class MainComponent implements OnInit {
     this.listener = this.trade.currencies$.subscribe(
       val => {
         const currency: PriceResponse = this.currency = val['BTC_STR'];
-        this.price = this.order ?
+        this.price = this.order && currency ?
           this.order.trend === OrderTrend.LONG ? Number(currency.highestBid) : Number(currency.lowestAsk) :
           Number(currency.last);
       }
