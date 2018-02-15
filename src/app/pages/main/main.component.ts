@@ -27,8 +27,8 @@ export class MainComponent implements OnInit {
 
   private checkedPosition: boolean;
   private config = this.storage.get(LocalStorage.SETTINGS) || {
-    loss: 2,
-    profit: 10,
+    loss: 1,
+    profit: 5,
     step: 0.2,
     hardOut: 10
   };
@@ -198,7 +198,7 @@ export class MainComponent implements OnInit {
   // Open Short of Long Position
   openPosition(trend: OrderTrend, count = this.step): void {
     let rate = this.price;
-    if (this.order.trend === OrderTrend.WAIT) {
+    if (this.order && this.order.trend === OrderTrend.WAIT) {
       rate = trend === OrderTrend.SHORT ? Number(this.currency.highestBid) : Number(this.currency.lowestAsk)
     }
 

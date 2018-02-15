@@ -98,20 +98,19 @@ export class TradeService {
     const rate = price / 100 * 3;
     const trendFuncName = trend === OrderTrend.SHORT ? 'marginSell' : 'marginBuy';
 
-    return Observable.create(observer => {
-      setTimeout(() => observer.next(true), 600)
+    return this[trendFuncName](keys, {
+      currencyA: 'BTC',
+      currencyB: 'STR',
+      rate: trend === OrderTrend.SHORT ? price - rate : price + rate,
+      amount: count,
+      lendingRate: 0.05
     }).map(val => {
-      // const result = this.getAverageRate(val.resultingTrades);
-      // const order = new Order({
-      //   open: result.rate,
-      //   trend,
-      //   count: result.amount,
-      //   status: OrderStatus.OPEN
-      // });
+      debugger;
+      const result = this.getAverageRate(val.resultingTrades);
       const order = new Order({
-        open: price,
+        open: result.rate - result.rate / 100 * 0.25,
         trend,
-        count,
+        count: result.amount,
         status: OrderStatus.OPEN
       });
 
@@ -126,8 +125,9 @@ export class TradeService {
   }
 
   closePosition(keys: RequestParams, price: number, order: Order): Observable<any> {
-    return Observable.create(observer => {
-      setTimeout(() => observer.next(true), 600)
+    return this.closeMarginPosition(keys, {
+      currencyA: 'BTC',
+      currencyB: 'STR',
     }).do(val => {
       order.close = price;
       order.status = OrderStatus.CLOSE;
@@ -243,14 +243,15 @@ export class TradeService {
 
 
   getAverageRate(res: any[]): {amount: number, rate: number} {
-    let amount, rate;
+    let amount, total;
+    debugger;
 
     amount = res.map(val => Number(val.amount)).reduce((a, b) => a + b, 0);
-    rate = res.map(val => Number(val.rate)).reduce((a, b) => a + b, 0);
+    total = res.map(val => Number(val.total)).reduce((a, b) => a + b, 0);
 
     return {
       amount,
-      rate: amount / rate
+      rate: total / amount
     }
   }
 }
