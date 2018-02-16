@@ -243,7 +243,6 @@ export class TradeService {
 
   getAverageRate(res: any[]): {amount: number, rate: number} {
     let amount, total;
-    debugger;
 
     amount = res.map(val => Number(val.amount)).reduce((a, b) => a + b, 0);
     total = res.map(val => Number(val.total)).reduce((a, b) => a + b, 0);
