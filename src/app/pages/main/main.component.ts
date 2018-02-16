@@ -242,7 +242,9 @@ export class MainComponent implements OnInit {
     this.listener = this.trade.currencies$.subscribe(
       val => {
         const currency: PriceResponse = this.currency = val['BTC_STR'];
-        this.price = this.order && currency ?
+
+        if (isUndefined(currency)) return;
+        this.price = (this.order && currency) ?
           this.order.trend === OrderTrend.LONG ? Number(currency.highestBid) : Number(currency.lowestAsk) :
           Number(currency.last);
       }
