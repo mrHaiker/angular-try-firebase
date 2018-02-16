@@ -105,12 +105,11 @@ export class TradeService {
       amount: count,
       lendingRate: 0.05
     }).map(val => {
-      debugger;
       const result = this.getAverageRate(val.resultingTrades);
       const order = new Order({
-        open: result.rate - result.rate / 100 * 0.25,
+        open: result.rate,
         trend,
-        count: result.amount,
+        count: result.amount - result.amount / 100 * 0.25,
         status: OrderStatus.OPEN
       });
 
