@@ -120,7 +120,7 @@ export class TradeService {
       return {
         response: val,
         order: order
-      }
+      };
     });
   }
 
@@ -152,14 +152,14 @@ export class TradeService {
       const response = JSON.parse(ev.data).res;
       this._BTC = response['USDT_BTC'];
       this.currencies$.next(response);
-    }
+    };
   }
 
   getBalance(value: RequestParams): Observable<any> {
     return this.http.post(`${environment.server}/getBalance`, {
       key: value.key,
       secret: value.secret,
-    })
+    });
   }
 
   getCompleteBalances(value: RequestParams): Observable<any> {
@@ -173,14 +173,14 @@ export class TradeService {
     return this.http.post(`${environment.server}/getOpenOrders`, {
       key: value.key,
       secret: value.secret,
-    })
+    });
   }
 
   getAvailableAccountBalances(value: RequestParams): Observable<any> {
     return this.http.post(`${environment.server}/getAvailableAccountBalances`, {
       key: value.key,
       secret: value.secret,
-    })
+    });
   }
 
   getTradableBalances(value: RequestParams): Observable<any> {
@@ -189,14 +189,14 @@ export class TradeService {
     return this.http.post(`${environment.server}/getTradableBalances`, {
       key: value.key,
       secret: value.secret,
-    })
+    });
   }
 
   getMarginAccountSummary(value: RequestParams): Observable<any> {
     return this.http.post(`${environment.server}/getMarginAccountSummary`, {
       key: value.key,
       secret: value.secret,
-    })
+    });
   }
 
   getMarginPosition(value: RequestParams, params: CurrencyPair): Observable<any> {
@@ -205,7 +205,7 @@ export class TradeService {
       secret: value.secret,
       currencyA: params.currencyA,
       currencyB: params.currencyB,
-    })
+    });
   }
 
   closeMarginPosition(value: RequestParams, params: CurrencyPair): Observable<any> {
@@ -214,7 +214,7 @@ export class TradeService {
       secret: value.secret,
       currencyA: params.currencyA,
       currencyB: params.currencyB,
-    })
+    });
   }
 
   marginBuy(value: RequestParams, params: MarginOffer): Observable<any> {
@@ -226,7 +226,7 @@ export class TradeService {
       rate: params.rate,
       amount: params.amount,
       lendingRate: params.lendingRate,
-    })
+    });
   }
 
   marginSell(value: RequestParams, params: MarginOffer): Observable<any> {
@@ -238,7 +238,7 @@ export class TradeService {
       rate: params.rate,
       amount: params.amount,
       lendingRate: params.lendingRate,
-    })
+    });
   }
 
 
