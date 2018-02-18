@@ -88,7 +88,6 @@ export class TradeService {
   waitPosition(price: number, trend: OrderTrend, count) {
     const order = new Order({open: price, trend, count, status: OrderStatus.OPEN});
 
-
     this.storage.set(LocalStorage.POSITION, order);
     return order;
   }
@@ -106,7 +105,7 @@ export class TradeService {
       lendingRate: 0.05
     }).map(val => {
       const result = this.getAverageRate(val.resultingTrades);
-      const count = trend === OrderTrend.SHORT ? result.amount : result.amount / 100 * 0.25;
+      const count = trend === OrderTrend.SHORT ? result.amount : result.amount - (result.amount / 100 * 0.25);
       const order = new Order({
         open: result.rate,
         trend,
@@ -114,7 +113,7 @@ export class TradeService {
         status: OrderStatus.OPEN
       });
 
-      console.log('order', order);
+      console.log('open order', order);
 
       this.storage.set(LocalStorage.POSITION, order);
       return {

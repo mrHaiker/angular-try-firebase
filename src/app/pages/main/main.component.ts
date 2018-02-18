@@ -212,6 +212,7 @@ export class MainComponent implements OnInit {
 
   // Close by SUCCESS
   closePosition(): void {
+    debugger
     this.trade.closePosition(this.keys.value, this.price, this.order).subscribe(
       val => {
         this.order = this.trade.waitPosition(this.price, OrderTrend.WAIT, 0);
