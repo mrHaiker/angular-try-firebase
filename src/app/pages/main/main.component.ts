@@ -34,6 +34,7 @@ export class MainComponent implements OnInit {
   };
   private listener: Subscription;
   private positionStep: number;
+  private waitClose: boolean;
 
   constructor(
     private storage: StorageService,
@@ -191,7 +192,7 @@ export class MainComponent implements OnInit {
     const count = this.order.count + (this.positionStep || this.step);
 
     this.trade.closePosition(this.keys.value, this.price, this.order).subscribe(
-      val => {
+      (val) => {
         this.openPosition(trend, count);
       }
     );
@@ -206,19 +207,21 @@ export class MainComponent implements OnInit {
     }
 
     this.trade.openPosition(this.keys.value, rate, trend, count).subscribe(
-      val => this.checkPosition(true)
+      (val) => this.checkPosition(true)
     );
   }
 
   // Close by SUCCESS
   closePosition(): void {
-    debugger
+    if (this.waitClose) return;
+
+    this.waitClose = true;
     this.trade.closePosition(this.keys.value, this.price, this.order).subscribe(
       val => {
         this.order = this.trade.waitPosition(this.price, OrderTrend.WAIT, 0);
         this.checkPosition(true);
       }
-    );
+    ).add(() => this.waitClose = false);
   }
 
   getCurrProfitInPer(): number {

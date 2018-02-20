@@ -105,7 +105,7 @@ export class TradeService {
       lendingRate: 0.05
     }).map(val => {
       const result = this.getAverageRate(val.resultingTrades);
-      const count = trend === OrderTrend.SHORT ? result.amount : result.amount - (result.amount / 100 * 0.25);
+      count = trend === OrderTrend.SHORT ? result.amount : result.amount - (result.amount / 100 * 0.25);
       const order = new Order({
         open: result.rate,
         trend,
@@ -165,7 +165,7 @@ export class TradeService {
     return this.http.post(`${environment.server}/getCompleteBalances`, {
       key: value.key,
       secret: value.secret,
-    })
+    });
   }
 
   getOpenOrders(value: RequestParams): Observable<any> {
