@@ -9,12 +9,16 @@ import 'rxjs/add/observable/fromPromise';
 
 @Injectable()
 export class AuthService {
+  public user$: Observable<firebase.User>;
 
-  public user: Observable<firebase.User>;
   constructor(
     private fireAuth: AngularFireAuth
   ) {
-    this.user = this.fireAuth.authState;
+    this.user$ = this.fireAuth.authState;
+  }
+
+  get user(): any {
+    return this.fireAuth.auth.currentUser
   }
 
   login(form): Observable<any> {
@@ -24,7 +28,7 @@ export class AuthService {
   }
 
   logined(): Observable<boolean> {
-    return this.user.map(user => user && !isUndefined(user.uid))
+    return this.user$.map(user => user && !isUndefined(user.uid))
   }
 
   logout(): Observable<any> {

@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import 'rxjs/add/observable/timer';
 import { Subscription } from 'rxjs/Subscription';
 import { isUndefined } from 'util';
+import { AuthService } from '../auth/auth.service';
 
 
 @Component({
@@ -40,6 +41,7 @@ export class MainComponent implements OnInit {
     private storage: StorageService,
     private main: MainService,
     private trade: TradeService,
+    private auth: AuthService,
     private fb: FormBuilder,
   ) { }
 
@@ -74,14 +76,14 @@ export class MainComponent implements OnInit {
     this.createTempForm();
 
     this.main.getUserData().subscribe(
-      users => {
-        this.keys.patchValue(users[0]);
+      user => {
+        this.keys.patchValue(user);
         this.getAvailableMoney();
       }
     );
 
     this.checkPosition().then(() => {
-      Observable.timer(1, 1000).subscribe((val) => this.cycle(val));
+      Observable.timer(1, 1000).subscribe(() => this.cycle());
     });
 
     Observable.timer(1, 30000).subscribe(() => {
@@ -155,7 +157,7 @@ export class MainComponent implements OnInit {
     this.listener.unsubscribe();
   }
 
-  cycle(data?: number): void {
+  cycle(): void {
     if (this.waitEndsOrdering) return;
 
     if (isUndefined(this.price) || isUndefined(this.availableMoney) || isUndefined(this.order)) {
@@ -193,9 +195,11 @@ export class MainComponent implements OnInit {
     const trend = this.order.trend === OrderTrend.SHORT ? OrderTrend.LONG : OrderTrend.SHORT;
     const count = this.order.count + (this.positionStep || this.step);
 
+    this.waitEndsOrdering = true;
     this.trade.closePosition(this.keys.value, this.price, this.order).subscribe(
       (val) => {
         this.openPosition(trend, count);
+        this.waitEndsOrdering = false;
       }
     );
   }
@@ -265,7 +269,7 @@ export class MainComponent implements OnInit {
       if (!this.step) {
         return setTimeout(() => {
           this.checkPosition().then(() => {
-            Observable.timer(1, 1000).subscribe((val) => this.cycle(val));
+            Observable.timer(1, 1000).subscribe(() => this.cycle());
           });
         }, 1000);
       }
