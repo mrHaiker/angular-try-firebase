@@ -34,7 +34,7 @@ export class MainComponent implements OnInit {
   };
   private listener: Subscription;
   private positionStep: number;
-  private waitClose: boolean;
+  private waitEndsOrdering: boolean;
 
   constructor(
     private storage: StorageService,
@@ -156,6 +156,8 @@ export class MainComponent implements OnInit {
   }
 
   cycle(data?: number): void {
+    if (this.waitEndsOrdering) return;
+
     if (isUndefined(this.price) || isUndefined(this.availableMoney) || isUndefined(this.order)) {
       return console.log('unavailable currently price');
     }
@@ -200,6 +202,8 @@ export class MainComponent implements OnInit {
 
   // Open Short of Long Position
   openPosition(trend: OrderTrend, count = this.step): void {
+    this.waitEndsOrdering = true;
+
     this.positionStep = this.step;
     let rate = this.price;
     if (this.order && this.order.trend === OrderTrend.WAIT) {
@@ -208,20 +212,19 @@ export class MainComponent implements OnInit {
 
     this.trade.openPosition(this.keys.value, rate, trend, count).subscribe(
       (val) => this.checkPosition(true)
-    );
+    ).add(() => this.waitEndsOrdering = false);
   }
 
   // Close by SUCCESS
   closePosition(): void {
-    if (this.waitClose) return;
+    this.waitEndsOrdering = true;
 
-    this.waitClose = true;
     this.trade.closePosition(this.keys.value, this.price, this.order).subscribe(
       val => {
         this.order = this.trade.waitPosition(this.price, OrderTrend.WAIT, 0);
         this.checkPosition(true);
       }
-    ).add(() => this.waitClose = false);
+    ).add(() => this.waitEndsOrdering = false);
   }
 
   getCurrProfitInPer(): number {
